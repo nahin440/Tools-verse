@@ -1,0 +1,86 @@
+import { notFound } from "next/navigation";
+
+import { getTool, getCategoryBySlug, getRelatedTools, TOOLS, CATEGORIES } from "@/lib/registry/tools";
+import { ToolPageLayout } from "@/components/tool-page/tool-page-layout";
+import { ToolPageClient } from "@/components/tool-page/tool-page-client";
+import { getToolContent } from "@/lib/registry/tool-content";
+
+const SITE_URL = "https://filefusion.app";
+
+export function generateStaticParams() {
+  return TOOLS.map((tool) => ({
+    categorySlug: CATEGORIES[tool.category].slug,
+    toolSlug: tool.slug,
+  }));
+}
+
+export async function generateMetadata({ params }) {
+  const { categorySlug, toolSlug } = await params;
+  const tool = getTool(toolSlug);
+  const category = getCategoryBySlug(categorySlug);
+  if (!tool || !category || tool.category !== category.key) return {};
+
+  return {
+    title: tool.name,
+    description: tool.description,
+    alternates: { canonical: `/${category.slug}/${tool.slug}` },
+    openGraph: {
+      title: `${tool.name} — FileFusion`,
+      description: tool.description,
+    },
+  };
+}
+
+export default async function ToolPage({ params }) {
+  const { categorySlug, toolSlug } = await params;
+  const tool = getTool(toolSlug);
+  const category = getCategoryBySlug(categorySlug);
+
+  if (!tool || !category || tool.category !== category.key) {
+    notFound();
+  }
+
+  const content = getToolContent(toolSlug);
+  const relatedTools = getRelatedTools(toolSlug, 4);
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: tool.name,
+    description: tool.description,
+    applicationCategory: "UtilitiesApplication",
+    operatingSystem: "Any (runs in web browser)",
+    url: `${SITE_URL}/${category.slug}/${tool.slug}`,
+    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  };
+
+  const faqJsonLd = content.faq?.length
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: content.faq.map((item) => ({
+          "@type": "Question",
+          name: item.question,
+          acceptedAnswer: { "@type": "Answer", text: item.answer },
+        })),
+      }
+    : null;
+
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      {faqJsonLd && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+      )}
+      <ToolPageLayout
+        tool={tool}
+        category={category}
+        shell={<ToolPageClient toolSlug={tool.slug} toolName={tool.name} />}
+        howItWorks={content.howItWorks}
+        faq={content.faq}
+        longDescription={content.longDescription}
+        relatedTools={relatedTools}
+      />
+    </>
+  );
+}
