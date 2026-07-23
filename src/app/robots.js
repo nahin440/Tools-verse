@@ -1,4 +1,4 @@
-const SITE_URL = "https://toolsversa.app";
+const SITE_URL = "https://toolsroot.com";
 
 export default function robots() {
   return {
