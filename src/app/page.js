@@ -40,7 +40,9 @@ export const metadata = {
   title: "Tools Root — Free Online File Converter & PDF Tools",
   description:
     "Merge, split, compress, and convert PDFs, images, documents, audio, and video — free, private, and no install required.",
-  alternates: { canonical: "/" },
+  alternates: {
+    canonical: "https://toolsroot.com/",
+  },
 };
 
 export default function HomePage() {
