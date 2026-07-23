@@ -5,7 +5,7 @@ import { ToolPageLayout } from "@/components/tool-page/tool-page-layout";
 import { ToolPageClient } from "@/components/tool-page/tool-page-client";
 import { getToolContent } from "@/lib/registry/tool-content";
 
-const SITE_URL = "https://toolsversa.app";
+const SITE_URL = "https://toolsroot.app";
 
 export function generateStaticParams() {
   return TOOLS.map((tool) => ({

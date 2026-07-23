@@ -80,9 +80,9 @@ export default function RootLayout({ children }) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
         <SiteHeader />
-        <GoogleAnalytics>
+        
         <main className="flex-1">{children}</main>
-        </GoogleAnalytics>
+        
         <SiteFooter />
         <Toaster />
       </body>

@@ -4,7 +4,7 @@ import { HiArrowRight, HiOutlineCalendar, HiOutlineClock } from "react-icons/hi2
 import { BLOG_POSTS } from "@/lib/registry/blog-content";
 import { CATEGORIES } from "@/lib/registry/tools";
 
-const SITE_URL = "https://toolsversa.app";
+const SITE_URL = "https://toolsroot.app";
 
 export const metadata = {
   title: "Blog",

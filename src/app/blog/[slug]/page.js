@@ -5,7 +5,7 @@ import { HiArrowRight, HiOutlineCalendar, HiOutlineClock } from "react-icons/hi2
 import { BLOG_POSTS, getBlogPost, getAllBlogSlugs, getRelatedBlogPosts } from "@/lib/registry/blog-content";
 import { CATEGORIES, getTool } from "@/lib/registry/tools";
 
-const SITE_URL = "https://toolsversa.app";
+const SITE_URL = "https://toolsroot.app";
 
 export function generateStaticParams() {
   return getAllBlogSlugs().map((slug) => ({ slug }));

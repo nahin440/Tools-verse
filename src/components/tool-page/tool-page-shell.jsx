@@ -104,7 +104,7 @@ export function ToolPageShell({ adapter, toolName }) {
     const zip = new JSZip();
     results.forEach((r) => zip.file(r.name, r.blob));
     const blob = await zip.generateAsync({ type: "blob" });
-    downloadBlob(blob, `${adapter.zipName || "toolsversa-output"}.zip`);
+    downloadBlob(blob, `${adapter.zipName || "toolsroot-output"}.zip`);
   }, [results, adapter.zipName]);
 
   // Tag files with a stable id for the queue list UI (File objects don't

@@ -21,8 +21,8 @@ export default function ContactPage() {
         </div>
         <div>
           <p className="text-sm font-medium text-foreground">Email us</p>
-          <a href="mailto:hello@toolsversa.app" className="text-sm text-accent hover:underline">
-            hello@toolsversa.app
+          <a href="mailto:hello@toolsroot.app" className="text-sm text-accent hover:underline">
+            hello@toolsroot.app
           </a>
         </div>
       </div>

@@ -5,7 +5,7 @@ import { getCategoryBySlug, getToolsByCategory, CATEGORIES } from "@/lib/registr
 import { getCategoryContent } from "@/lib/registry/category-content";
 import { ToolCard } from "@/components/home/tool-card";
 
-const SITE_URL = "https://toolsversa.app";
+const SITE_URL = "https://toolsroot.app";
 
 export function generateStaticParams() {
   return Object.values(CATEGORIES).map((cat) => ({ categorySlug: cat.slug }));
