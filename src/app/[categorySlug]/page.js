@@ -21,7 +21,7 @@ export async function generateMetadata({ params }) {
     description: category.description,
     alternates: { canonical: `/${category.slug}` },
     openGraph: {
-      title: `${category.label} — Tools Versa`,
+      title: `${category.label} — Tools Root`,
       description: category.description,
       url: `${SITE_URL}/${category.slug}`,
     },

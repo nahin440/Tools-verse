@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card";
 
 export const metadata = {
   title: "Pricing",
-  description: "Tools Versa is free to use, with no hidden limits.",
+  description: "Tools Root is free to use, with no hidden limits.",
   alternates: { canonical: "/pricing" },
 };
 
@@ -30,7 +30,7 @@ export default function PricingPage() {
       </p>
 
       <Card className="mx-auto mt-10 max-w-sm p-8 text-left">
-        <p className="text-sm font-medium text-muted-foreground">Tools Versa</p>
+        <p className="text-sm font-medium text-muted-foreground">Tools Root</p>
         <p className="mt-2 text-4xl font-semibold text-foreground">
           $0<span className="text-base font-normal text-muted-foreground">/forever</span>
         </p>
@@ -43,7 +43,7 @@ export default function PricingPage() {
           ))}
         </ul>
         <Button asChild variant="accent" className="mt-8 w-full">
-          <Link href="/pdf-tools">Start using Tools Versa</Link>
+          <Link href="/pdf-tools">Start using Tools Root</Link>
         </Button>
       </Card>
 

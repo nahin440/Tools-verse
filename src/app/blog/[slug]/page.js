@@ -59,8 +59,8 @@ export default async function BlogPostPage({ params }) {
     headline: post.title,
     description: post.description,
     datePublished: post.publishedAt,
-    author: { "@type": "Organization", name: "Tools Versa" },
-    publisher: { "@type": "Organization", name: "Tools Versa", url: SITE_URL },
+    author: { "@type": "Organization", name: "Tools Root" },
+    publisher: { "@type": "Organization", name: "Tools Root", url: SITE_URL },
     mainEntityOfPage: `${SITE_URL}/blog/${post.slug}`,
   };
 

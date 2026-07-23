@@ -5,7 +5,7 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ==========================================================================
-   Tools Versa Design System
+   Tools Root Design System
    A strict 3-color system: white (primary surface/base), black (ink/text/
    secondary actions), and #3CB371 (emerald — the ONLY accent color, used
    for primary buttons, active states, focus rings, and small emphasis

@@ -1,6 +1,6 @@
 export const metadata = {
   title: "Terms of Service",
-  description: "The terms governing your use of Tools Versa.",
+  description: "The terms governing your use of Tools Root.",
   alternates: { canonical: "/terms" },
 };
 
@@ -12,9 +12,9 @@ export default function TermsPage() {
 
       <div className="mt-10 max-w-none space-y-6 text-sm leading-relaxed text-muted-foreground [&_h2]:mt-8 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:text-foreground">
         <section>
-          <h2>Using Tools Versa</h2>
+          <h2>Using Tools Root</h2>
           <p>
-            Tools Versa provides file conversion and editing tools that run in your browser. By
+            Tools Root provides file conversion and editing tools that run in your browser. By
             using this site, you agree to use it only for lawful purposes and in a way that does
             not infringe the rights of, or restrict or inhibit the use and enjoyment of the site
             by, anyone else.
@@ -50,7 +50,7 @@ export default function TermsPage() {
         <section>
           <h2>Prohibited uses</h2>
           <p>
-            You may not use Tools Versa to process content that is illegal, infringing, or that you
+            You may not use Tools Root to process content that is illegal, infringing, or that you
             do not have the right to handle, or to attempt to disrupt, reverse-engineer in a
             harmful way, or overload the service.
           </p>
@@ -68,7 +68,7 @@ export default function TermsPage() {
         <section>
           <h2>Limitation of liability</h2>
           <p>
-            Tools Versa is provided without warranties of any kind, to the fullest extent
+            Tools Root is provided without warranties of any kind, to the fullest extent
             permitted by law. We are not liable for any indirect, incidental, or consequential
             damages arising from your use of the service, including any loss of data or content.
           </p>

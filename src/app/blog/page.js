@@ -12,7 +12,7 @@ export const metadata = {
     "Practical guides on file formats, compression, and conversion — from choosing between JPG and WEBP to why your PDF looks different after converting.",
   alternates: { canonical: "/blog" },
   openGraph: {
-    title: "Blog — Tools Versa",
+    title: "Blog — Tools Root",
     description:
       "Practical guides on file formats, compression, and conversion, written to help you get better results out of everyday file tasks.",
     url: `${SITE_URL}/blog`,

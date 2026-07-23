@@ -1,6 +1,6 @@
 export const metadata = {
   title: "Privacy Policy",
-  description: "How Tools Versa handles your files and data.",
+  description: "How Tools Root handles your files and data.",
   alternates: { canonical: "/privacy" },
 };
 
@@ -14,7 +14,7 @@ export default function PrivacyPage() {
         <section>
           <h2>How your files are processed</h2>
           <p>
-            Every conversion, compression, and editing tool on Tools Versa runs entirely inside your
+            Every conversion, compression, and editing tool on Tools Root runs entirely inside your
             own browser, using JavaScript and WebAssembly. When you upload a file to a tool on this
             site, that file is read directly by your browser and is never transmitted to our
             servers, or to any third-party server, for the purpose of processing it. This is a

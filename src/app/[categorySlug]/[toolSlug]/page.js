@@ -25,7 +25,7 @@ export async function generateMetadata({ params }) {
     description: tool.description,
     alternates: { canonical: `/${category.slug}/${tool.slug}` },
     openGraph: {
-      title: `${tool.name} — Tools Versa`,
+      title: `${tool.name} — Tools Root`,
       description: tool.description,
     },
   };

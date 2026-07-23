@@ -2,7 +2,7 @@ import { HiOutlineLockClosed, HiOutlineBolt, HiOutlineGlobeAlt } from "react-ico
 
 export const metadata = {
   title: "About",
-  description: "Why Tools Versa exists and how it works.",
+  description: "Why Tools Root exists and how it works.",
   alternates: { canonical: "/about" },
 };
 
@@ -30,10 +30,10 @@ export default function AboutPage() {
   return (
     <div className="mx-auto max-w-[760px] px-4 py-16 sm:px-6">
       <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-        About Tools Versa
+        About Tools Root
       </h1>
       <p className="mt-4 text-lg text-muted-foreground">
-        Tools Versa is a collection of file conversion and editing tools built on a simple premise:
+        Tools Root is a collection of file conversion and editing tools built on a simple premise:
         your files are yours, and a tool that merges two PDFs shouldn&apos;t need to see the inside
         of either one.
       </p>

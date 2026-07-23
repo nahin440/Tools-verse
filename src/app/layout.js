@@ -10,8 +10,8 @@ const SITE_URL = "https://toolsversa.app";
 export const metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Tools Versa — Free Online File Converter & PDF Tools",
-    template: "%s | Tools Versa",
+    default: "Tools Root — Free Online File Converter & PDF Tools",
+    template: "%s | Tools Root",
   },
   description:
     "Merge, split, compress, and convert PDFs, images, documents, audio, and video — free, private, and no install required. Every file is processed in your browser.",
@@ -25,15 +25,15 @@ export const metadata = {
   ],
   openGraph: {
     type: "website",
-    siteName: "Tools Versa",
-    title: "Tools Versa — Free Online File Converter & PDF Tools",
+    siteName: "Tools Root",
+    title: "Tools Root — Free Online File Converter & PDF Tools",
     description:
       "Merge, split, compress, and convert PDFs, images, documents, audio, and video — free, private, and no install required.",
     url: SITE_URL,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Tools Versa — Free Online File Converter & PDF Tools",
+    title: "Tools Root — Free Online File Converter & PDF Tools",
     description: "Free, private file conversion that runs entirely in your browser.",
   },
   robots: {
@@ -46,7 +46,7 @@ export default function RootLayout({ children }) {
   const organizationJsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "Tools Versa",
+    name: "Tools Root",
     url: SITE_URL,
     logo: `${SITE_URL}/favicon.ico`,
     description:
@@ -57,7 +57,7 @@ export default function RootLayout({ children }) {
   const websiteJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "Tools Versa",
+    name: "Tools Root",
     url: SITE_URL,
     description:
       "Merge, split, compress, and convert PDFs, images, documents, audio, and video — free, private, and no install required.",

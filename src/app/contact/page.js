@@ -2,7 +2,7 @@ import { HiOutlineEnvelope } from "react-icons/hi2";
 
 export const metadata = {
   title: "Contact",
-  description: "Get in touch with the Tools Versa team.",
+  description: "Get in touch with the Tools Root team.",
   alternates: { canonical: "/contact" },
 };
 

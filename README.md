@@ -1,4 +1,4 @@
-# Tools Versa
+# Tools Root
 
 A free, privacy-first file conversion and editing platform. Every one of
 its 50 tools — PDF, image, document, audio, video, and archive — runs

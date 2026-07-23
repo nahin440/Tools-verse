@@ -37,7 +37,7 @@ const TRUST_POINTS = [
 ];
 
 export const metadata = {
-  title: "Tools Versa — Free Online File Converter & PDF Tools",
+  title: "Tools Root — Free Online File Converter & PDF Tools",
   description:
     "Merge, split, compress, and convert PDFs, images, documents, audio, and video — free, private, and no install required.",
   alternates: { canonical: "/" },
