@@ -55,7 +55,7 @@ export function SiteFooter() {
             All processing happens locally in your browser
           </p>
           <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} Tools Root. All rights reserved.
+            © {new Date().getFullYear()} Tools Root. All rights reserved. Developed by Zero Degree Corp.
           </p>
         </div>
       </div>
