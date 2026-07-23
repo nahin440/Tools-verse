@@ -1,7 +1,7 @@
 import { TOOLS, CATEGORIES } from "@/lib/registry/tools";
 import { BLOG_POSTS } from "@/lib/registry/blog-content";
 
-const SITE_URL = "https://toolsversa.app";
+const SITE_URL = "https://toolsroot.com";
 
 export default function sitemap() {
   const now = new Date();
