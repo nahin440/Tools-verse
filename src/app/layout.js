@@ -6,7 +6,7 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { Toaster } from "@/components/ui/sonner";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 
-const SITE_URL = "https://toolsversa.app";
+const SITE_URL = "https://toolsroot.com";
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
