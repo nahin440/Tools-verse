@@ -56,7 +56,7 @@ export function ToolPageLayout({
       <div className="mt-8">{shell}</div>
 
       {longDescription && (
-        <div className="prose prose-neutral mt-16 max-w-none text-sm leading-relaxed text-muted-foreground [&_h2]:mb-3 [&_h2]:mt-8 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:text-foreground [&_p]:mb-3">
+        <div className="mt-16 max-w-none text-sm leading-relaxed text-muted-foreground [&_h2]:mb-3 [&_h2]:mt-8 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:text-foreground [&_p]:mb-3">
           <div dangerouslySetInnerHTML={{ __html: longDescription }} />
         </div>
       )}

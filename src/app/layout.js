@@ -5,13 +5,13 @@ import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { Toaster } from "@/components/ui/sonner";
 
-const SITE_URL = "https://filefusion.app";
+const SITE_URL = "https://toolsversa.app";
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "FileFusion — Free Online File Converter & PDF Tools",
-    template: "%s | FileFusion",
+    default: "Tools Versa — Free Online File Converter & PDF Tools",
+    template: "%s | Tools Versa",
   },
   description:
     "Merge, split, compress, and convert PDFs, images, documents, audio, and video — free, private, and no install required. Every file is processed in your browser.",
@@ -25,15 +25,15 @@ export const metadata = {
   ],
   openGraph: {
     type: "website",
-    siteName: "FileFusion",
-    title: "FileFusion — Free Online File Converter & PDF Tools",
+    siteName: "Tools Versa",
+    title: "Tools Versa — Free Online File Converter & PDF Tools",
     description:
       "Merge, split, compress, and convert PDFs, images, documents, audio, and video — free, private, and no install required.",
     url: SITE_URL,
   },
   twitter: {
     card: "summary_large_image",
-    title: "FileFusion — Free Online File Converter & PDF Tools",
+    title: "Tools Versa — Free Online File Converter & PDF Tools",
     description: "Free, private file conversion that runs entirely in your browser.",
   },
   robots: {
@@ -43,6 +43,26 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  const organizationJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Tools Versa",
+    url: SITE_URL,
+    logo: `${SITE_URL}/favicon.ico`,
+    description:
+      "A free, privacy-first file conversion and editing platform. Every tool runs entirely in the browser via JavaScript and WebAssembly — no file is ever uploaded to a server.",
+    sameAs: [],
+  };
+
+  const websiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Tools Versa",
+    url: SITE_URL,
+    description:
+      "Merge, split, compress, and convert PDFs, images, documents, audio, and video — free, private, and no install required.",
+  };
+
   return (
     <html
       lang="en"
@@ -50,6 +70,14 @@ export default function RootLayout({ children }) {
       className={`${GeistSans.variable} ${GeistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
         <SiteHeader />
         <main className="flex-1">{children}</main>
         <SiteFooter />

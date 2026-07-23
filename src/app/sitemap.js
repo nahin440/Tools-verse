@@ -1,11 +1,12 @@
 import { TOOLS, CATEGORIES } from "@/lib/registry/tools";
+import { BLOG_POSTS } from "@/lib/registry/blog-content";
 
-const SITE_URL = "https://filefusion.app";
+const SITE_URL = "https://toolsversa.app";
 
 export default function sitemap() {
   const now = new Date();
 
-  const staticPages = ["", "/about", "/pricing", "/privacy", "/terms", "/contact"].map((path) => ({
+  const staticPages = ["", "/about", "/blog", "/pricing", "/privacy", "/terms", "/contact"].map((path) => ({
     url: `${SITE_URL}${path}`,
     lastModified: now,
     changeFrequency: path === "" ? "daily" : "monthly",
@@ -26,5 +27,12 @@ export default function sitemap() {
     priority: 0.9,
   }));
 
-  return [...staticPages, ...categoryPages, ...toolPages];
+  const blogPages = BLOG_POSTS.map((post) => ({
+    url: `${SITE_URL}/blog/${post.slug}`,
+    lastModified: new Date(post.publishedAt),
+    changeFrequency: "monthly",
+    priority: 0.6,
+  }));
+
+  return [...staticPages, ...categoryPages, ...toolPages, ...blogPages];
 }

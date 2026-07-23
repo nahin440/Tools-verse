@@ -19,7 +19,7 @@ export function LogoMark({ className = "size-8" }) {
   return (
     <div className={className + " flex items-center gap-2"}>
       <Logo className="size-7 shrink-0" />
-      <span className="font-display text-lg font-semibold tracking-tight text-foreground">FileFusion</span>
+      <span className="font-display text-lg font-semibold tracking-tight text-foreground">Tools Versa</span>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 export const metadata = {
   title: "Privacy Policy",
-  description: "How FileFusion handles your files and data.",
+  description: "How Tools Versa handles your files and data.",
   alternates: { canonical: "/privacy" },
 };
 
@@ -10,11 +10,11 @@ export default function PrivacyPage() {
       <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground">Privacy Policy</h1>
       <p className="mt-2 text-sm text-muted-foreground">Last updated July 2026</p>
 
-      <div className="prose prose-neutral mt-10 max-w-none space-y-6 text-sm leading-relaxed text-muted-foreground [&_h2]:mt-8 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:text-foreground [&_h3]:mt-6 [&_h3]:text-base [&_h3]:font-semibold [&_h3]:text-foreground">
+      <div className="mt-10 max-w-none space-y-6 text-sm leading-relaxed text-muted-foreground [&_h2]:mt-8 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:text-foreground [&_h3]:mt-6 [&_h3]:text-base [&_h3]:font-semibold [&_h3]:text-foreground">
         <section>
           <h2>How your files are processed</h2>
           <p>
-            Every conversion, compression, and editing tool on FileFusion runs entirely inside your
+            Every conversion, compression, and editing tool on Tools Versa runs entirely inside your
             own browser, using JavaScript and WebAssembly. When you upload a file to a tool on this
             site, that file is read directly by your browser and is never transmitted to our
             servers, or to any third-party server, for the purpose of processing it. This is a

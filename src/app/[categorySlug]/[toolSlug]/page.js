@@ -5,7 +5,7 @@ import { ToolPageLayout } from "@/components/tool-page/tool-page-layout";
 import { ToolPageClient } from "@/components/tool-page/tool-page-client";
 import { getToolContent } from "@/lib/registry/tool-content";
 
-const SITE_URL = "https://filefusion.app";
+const SITE_URL = "https://toolsversa.app";
 
 export function generateStaticParams() {
   return TOOLS.map((tool) => ({
@@ -25,7 +25,7 @@ export async function generateMetadata({ params }) {
     description: tool.description,
     alternates: { canonical: `/${category.slug}/${tool.slug}` },
     openGraph: {
-      title: `${tool.name} — FileFusion`,
+      title: `${tool.name} — Tools Versa`,
       description: tool.description,
     },
   };
@@ -66,11 +66,41 @@ export default async function ToolPage({ params }) {
       }
     : null;
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+      { "@type": "ListItem", position: 2, name: category.label, item: `${SITE_URL}/${category.slug}` },
+      { "@type": "ListItem", position: 3, name: tool.name, item: `${SITE_URL}/${category.slug}/${tool.slug}` },
+    ],
+  };
+
+  const howToJsonLd = content.howItWorks?.steps?.length
+    ? {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        name: content.howItWorks.title,
+        step: content.howItWorks.steps.map((step, i) => ({
+          "@type": "HowToStep",
+          position: i + 1,
+          text: step,
+        })),
+      }
+    : null;
+
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       {faqJsonLd && (
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+      )}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      {howToJsonLd && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }} />
       )}
       <ToolPageLayout
         tool={tool}

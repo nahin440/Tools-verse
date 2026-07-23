@@ -2,7 +2,7 @@ import { HiOutlineEnvelope } from "react-icons/hi2";
 
 export const metadata = {
   title: "Contact",
-  description: "Get in touch with the FileFusion team.",
+  description: "Get in touch with the Tools Versa team.",
   alternates: { canonical: "/contact" },
 };
 
@@ -21,8 +21,8 @@ export default function ContactPage() {
         </div>
         <div>
           <p className="text-sm font-medium text-foreground">Email us</p>
-          <a href="mailto:hello@filefusion.app" className="text-sm text-accent hover:underline">
-            hello@filefusion.app
+          <a href="mailto:hello@toolsversa.app" className="text-sm text-accent hover:underline">
+            hello@toolsversa.app
           </a>
         </div>
       </div>

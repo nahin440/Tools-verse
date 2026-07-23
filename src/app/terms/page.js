@@ -1,6 +1,6 @@
 export const metadata = {
   title: "Terms of Service",
-  description: "The terms governing your use of FileFusion.",
+  description: "The terms governing your use of Tools Versa.",
   alternates: { canonical: "/terms" },
 };
 
@@ -10,11 +10,11 @@ export default function TermsPage() {
       <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground">Terms of Service</h1>
       <p className="mt-2 text-sm text-muted-foreground">Last updated July 2026</p>
 
-      <div className="prose prose-neutral mt-10 max-w-none space-y-6 text-sm leading-relaxed text-muted-foreground [&_h2]:mt-8 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:text-foreground">
+      <div className="mt-10 max-w-none space-y-6 text-sm leading-relaxed text-muted-foreground [&_h2]:mt-8 [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:text-foreground">
         <section>
-          <h2>Using FileFusion</h2>
+          <h2>Using Tools Versa</h2>
           <p>
-            FileFusion provides file conversion and editing tools that run in your browser. By
+            Tools Versa provides file conversion and editing tools that run in your browser. By
             using this site, you agree to use it only for lawful purposes and in a way that does
             not infringe the rights of, or restrict or inhibit the use and enjoyment of the site
             by, anyone else.
@@ -50,7 +50,7 @@ export default function TermsPage() {
         <section>
           <h2>Prohibited uses</h2>
           <p>
-            You may not use FileFusion to process content that is illegal, infringing, or that you
+            You may not use Tools Versa to process content that is illegal, infringing, or that you
             do not have the right to handle, or to attempt to disrupt, reverse-engineer in a
             harmful way, or overload the service.
           </p>
@@ -68,7 +68,7 @@ export default function TermsPage() {
         <section>
           <h2>Limitation of liability</h2>
           <p>
-            FileFusion is provided without warranties of any kind, to the fullest extent
+            Tools Versa is provided without warranties of any kind, to the fullest extent
             permitted by law. We are not liable for any indirect, incidental, or consequential
             damages arising from your use of the service, including any loss of data or content.
           </p>

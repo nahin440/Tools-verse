@@ -2,7 +2,10 @@ import { notFound } from "next/navigation";
 import { HiOutlineCheckCircle } from "react-icons/hi2";
 
 import { getCategoryBySlug, getToolsByCategory, CATEGORIES } from "@/lib/registry/tools";
+import { getCategoryContent } from "@/lib/registry/category-content";
 import { ToolCard } from "@/components/home/tool-card";
+
+const SITE_URL = "https://toolsversa.app";
 
 export function generateStaticParams() {
   return Object.values(CATEGORIES).map((cat) => ({ categorySlug: cat.slug }));
@@ -17,6 +20,11 @@ export async function generateMetadata({ params }) {
     title: category.label,
     description: category.description,
     alternates: { canonical: `/${category.slug}` },
+    openGraph: {
+      title: `${category.label} — Tools Versa`,
+      description: category.description,
+      url: `${SITE_URL}/${category.slug}`,
+    },
   };
 }
 
@@ -26,9 +34,39 @@ export default async function CategoryPage({ params }) {
   if (!category) notFound();
 
   const tools = getToolsByCategory(category.key);
+  const content = getCategoryContent(category.key);
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+      { "@type": "ListItem", position: 2, name: category.label, item: `${SITE_URL}/${category.slug}` },
+    ],
+  };
+
+  const faqJsonLd = content.faq.length
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: content.faq.map((item) => ({
+          "@type": "Question",
+          name: item.question,
+          acceptedAnswer: { "@type": "Answer", text: item.answer },
+        })),
+      }
+    : null;
 
   return (
     <div className="mx-auto max-w-[1280px] px-4 py-12 sm:px-6 sm:py-16">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      {faqJsonLd && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+      )}
+
       <div className="max-w-2xl">
         <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
           <HiOutlineCheckCircle className="size-3.5 text-accent" />
@@ -45,6 +83,47 @@ export default async function CategoryPage({ params }) {
           <ToolCard key={tool.slug} tool={tool} />
         ))}
       </div>
+
+      {content.intro && (
+        <div className="mt-16 max-w-3xl border-t border-border pt-12">
+          <h2 className="font-display text-2xl font-semibold tracking-tight text-foreground">
+            About {category.label}
+          </h2>
+          <p className="mt-4 text-base leading-relaxed text-muted-foreground">{content.intro}</p>
+        </div>
+      )}
+
+      {content.benefits.length > 0 && (
+        <div className="mt-12 max-w-3xl">
+          <h2 className="font-display text-2xl font-semibold tracking-tight text-foreground">
+            Why use these tools
+          </h2>
+          <ul className="mt-4 space-y-3">
+            {content.benefits.map((benefit, i) => (
+              <li key={i} className="flex gap-3 text-base leading-relaxed text-muted-foreground">
+                <HiOutlineCheckCircle className="mt-1 size-4 shrink-0 text-accent" />
+                <span>{benefit}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {content.faq.length > 0 && (
+        <div className="mt-12 max-w-3xl">
+          <h2 className="font-display text-2xl font-semibold tracking-tight text-foreground">
+            Frequently asked questions
+          </h2>
+          <div className="mt-4 divide-y divide-border">
+            {content.faq.map((item, i) => (
+              <div key={i} className="py-4">
+                <h3 className="font-medium text-foreground">{item.question}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.answer}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

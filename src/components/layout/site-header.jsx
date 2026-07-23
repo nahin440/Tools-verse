@@ -107,6 +107,9 @@ export function SiteHeader() {
 
         <div className="hidden items-center gap-2 lg:flex">
           <Button asChild variant="ghost" size="sm">
+            <Link href="/blog">Blog</Link>
+          </Button>
+          <Button asChild variant="ghost" size="sm">
             <Link href="/pricing">Pricing</Link>
           </Button>
           <Button asChild variant="accent" size="sm">
@@ -142,6 +145,13 @@ export function SiteHeader() {
                   {cat.label}
                 </Link>
               ))}
+              <Link
+                href="/blog"
+                onClick={() => setMobileOpen(false)}
+                className="block rounded-xl px-3 py-2.5 text-sm font-medium text-foreground hover:bg-secondary"
+              >
+                Blog
+              </Link>
               <Link
                 href="/pricing"
                 onClick={() => setMobileOpen(false)}

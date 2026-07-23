@@ -41,6 +41,7 @@ export function SiteFooter() {
 
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
             <Link href="/about" className="hover:text-accent">About</Link>
+            <Link href="/blog" className="hover:text-accent">Blog</Link>
             <Link href="/pricing" className="hover:text-accent">Pricing</Link>
             <Link href="/privacy" className="hover:text-accent">Privacy</Link>
             <Link href="/terms" className="hover:text-accent">Terms</Link>
@@ -54,7 +55,7 @@ export function SiteFooter() {
             All processing happens locally in your browser
           </p>
           <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} FileFusion. All rights reserved.
+            © {new Date().getFullYear()} Tools Versa. All rights reserved.
           </p>
         </div>
       </div>

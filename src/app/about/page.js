@@ -2,7 +2,7 @@ import { HiOutlineLockClosed, HiOutlineBolt, HiOutlineGlobeAlt } from "react-ico
 
 export const metadata = {
   title: "About",
-  description: "Why FileFusion exists and how it works.",
+  description: "Why Tools Versa exists and how it works.",
   alternates: { canonical: "/about" },
 };
 
@@ -30,10 +30,10 @@ export default function AboutPage() {
   return (
     <div className="mx-auto max-w-[760px] px-4 py-16 sm:px-6">
       <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-        About FileFusion
+        About Tools Versa
       </h1>
       <p className="mt-4 text-lg text-muted-foreground">
-        FileFusion is a collection of file conversion and editing tools built on a simple premise:
+        Tools Versa is a collection of file conversion and editing tools built on a simple premise:
         your files are yours, and a tool that merges two PDFs shouldn&apos;t need to see the inside
         of either one.
       </p>
@@ -50,19 +50,50 @@ export default function AboutPage() {
         ))}
       </div>
 
-      <div className="prose prose-neutral mt-16 max-w-none space-y-4 text-sm leading-relaxed text-muted-foreground">
+      <div className="mt-16 space-y-4 text-sm leading-relaxed text-muted-foreground">
         <h2 className="text-xl font-semibold text-foreground">How the tools actually work</h2>
         <p>
           Every conversion on this site runs using JavaScript and WebAssembly directly in your
           browser tab. PDF operations use a real PDF engine; audio and video tools use a real
           ffmpeg build compiled to WebAssembly — the same underlying engine used by professional
           video tools, just running on your device instead of a server; scanned-document text
-          recognition uses a real OCR engine, also running locally.
+          recognition uses Tesseract, a genuine open-source OCR engine, also running locally;
+          archive creation and extraction run on the actual 7-Zip binary compiled to WebAssembly.
         </p>
         <p>
           This means the quality of the underlying engines is the same as you&apos;d get from
           desktop software, without the download, and without your files passing through anyone
           else&apos;s server along the way.
+        </p>
+      </div>
+
+      <div className="mt-12 space-y-4 text-sm leading-relaxed text-muted-foreground">
+        <h2 className="text-xl font-semibold text-foreground">You can verify this yourself</h2>
+        <p>
+          The privacy claim on this page isn&apos;t something you have to take on faith. Open your
+          browser&apos;s developer tools to the Network tab before running any tool, then process a
+          file — for every tool except Remove Background, you&apos;ll see no outgoing request
+          carrying your file&apos;s data. Remove Background is the one exception: it fetches a
+          machine learning model&apos;s weights from a CDN the first time you use it, since the
+          model is too large to bundle with the page. That request carries only the model, never
+          your photo.
+        </p>
+        <p>
+          The same applies to OCR PDF, which downloads language-specific recognition data (not your
+          document) the first time you use a given language, caching it afterward.
+        </p>
+      </div>
+
+      <div className="mt-12 space-y-4 text-sm leading-relaxed text-muted-foreground">
+        <h2 className="text-xl font-semibold text-foreground">Two honest limitations</h2>
+        <p>
+          Running everything client-side is a deliberate tradeoff, not a free lunch, and it&apos;s
+          worth being upfront about where that tradeoff shows up. Processing speed depends on your
+          own device, so a large video compressed on an older laptop will take longer than the same
+          file on a fast desktop — there&apos;s no shared server doing the heavy lifting behind the
+          scenes. And RAR archive creation isn&apos;t offered, because RAR is a proprietary format
+          that only WinRAR&apos;s own software is licensed to write; extracting RAR files you
+          already have is fully supported.
         </p>
       </div>
     </div>
