@@ -10,6 +10,13 @@ const SITE_URL = "https://toolsroot.com";
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
+
+   icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico",
+  },
+
   title: {
     default: "Tools Root — Free Online File Converter & PDF Tools",
     template: "%s | Tools Root",
