@@ -38,19 +38,52 @@ async function loadImageBitmapFromFile(file) {
   return createImageBitmap(file);
 }
 
+/**
+ * Reads an SVG's real intended pixel size directly from its markup, since
+ * relying on the rendered <img> naturalWidth/Height means any SVG that
+ * declares only a viewBox (a very common, spec-recommended pattern for
+ * scalable icons and logos) reports the CSS-spec fallback of 300x150
+ * regardless of its real aspect ratio, silently distorting the output.
+ * Falls back to that same 300x150 only when the file truly has no size
+ * information of any kind to read.
+ */
+function getSvgIntrinsicSize(svgText) {
+  const widthMatch = svgText.match(/\bwidth\s*=\s*["']([\d.]+)(?:px)?["']/i);
+  const heightMatch = svgText.match(/\bheight\s*=\s*["']([\d.]+)(?:px)?["']/i);
+  if (widthMatch && heightMatch) {
+    const w = parseFloat(widthMatch[1]);
+    const h = parseFloat(heightMatch[1]);
+    if (w > 0 && h > 0) return { width: w, height: h };
+  }
+
+  const viewBoxMatch = svgText.match(/\bviewBox\s*=\s*["']([^"']+)["']/i);
+  if (viewBoxMatch) {
+    const parts = viewBoxMatch[1].trim().split(/[\s,]+/).map(Number);
+    if (parts.length === 4 && parts[2] > 0 && parts[3] > 0) {
+      // Scale up small viewBoxes (icon-sized, e.g. 24x24) to a print-usable
+      // resolution, since rasterizing at 24px would produce an unusably
+      // tiny, blurry PNG for what's meant to be a scalable graphic.
+      const [, , vbW, vbH] = parts;
+      const scale = vbW < 512 ? Math.min(4, 512 / vbW) : 1;
+      return { width: Math.round(vbW * scale), height: Math.round(vbH * scale) };
+    }
+  }
+
+  return { width: 1200, height: 600 };
+}
+
 async function loadSvgAsImageBitmap(file) {
   const text = await file.text();
   const svgBlob = new Blob([text], { type: "image/svg+xml" });
   const url = URL.createObjectURL(svgBlob);
   try {
+    const { width: w, height: h } = getSvgIntrinsicSize(text);
     const img = new Image();
     await new Promise((resolve, reject) => {
       img.onload = resolve;
       img.onerror = reject;
       img.src = url;
     });
-    const w = img.naturalWidth === 300 && img.naturalHeight === 150 ? 1200 : img.naturalWidth;
-    const h = img.naturalWidth === 300 && img.naturalHeight === 150 ? 600 : img.naturalHeight;
     const canvas = document.createElement("canvas");
     canvas.width = w;
     canvas.height = h;
@@ -309,15 +342,34 @@ export async function convertImage(file, targetFormat, opts = {}) {
   return blob;
 }
 
-/** Compress an image, keeping its original format, to a target quality (0-1) or file-size ceiling. */
+/**
+ * Compress an image, keeping its original format when that format has a
+ * real adjustable-quality encoder available (PNG, JPG, WEBP, BMP, AVIF).
+ * Formats with no quality axis of their own to compress along — GIF (fixed
+ * 256-color palette), TIFF and SVG (not encodable back out by this engine),
+ * ICO and HEIC (single-purpose containers, not general photo formats) — are
+ * re-encoded as JPG instead, since that's the only way to meaningfully
+ * shrink them here. This is a real format change, not merely a smaller
+ * version of the original, which is why it's called out explicitly rather
+ * than left as a silent fallback.
+ */
 export async function compressImage(file, opts = {}) {
   const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
-  const format = ext === "jpeg" ? "jpg" : ["png", "jpg", "webp"].includes(ext) ? ext : "jpg";
+  const normalizedExt = ext === "jpeg" ? "jpg" : ext;
+  const preservableFormats = ["png", "jpg", "webp", "bmp", "avif"];
+  const format = preservableFormats.includes(normalizedExt) ? normalizedExt : "jpg";
   const bitmap = await loadImageBitmapFromFile(file);
   const canvas = drawToCanvas(bitmap, bitmap.width, bitmap.height);
-  const mime = CANVAS_MIME[format];
 
-  if (format === "png") {
+  // BMP has no lossy quality axis of its own — it's always uncompressed
+  // 32bpp — so "compressing" it means re-encoding as JPG instead, the same
+  // honest-format-change reasoning documented above. Routed through the
+  // shared jpg encode path below (mime/quality/maxSizeBytes) rather than a
+  // separate early return, so a future maxSizeBytes ceiling still applies.
+  const encodeFormat = format === "bmp" ? "jpg" : format;
+  const mime = CANVAS_MIME[encodeFormat];
+
+  if (encodeFormat === "png") {
     return new Promise((resolve, reject) => {
       canvas.toBlob((b) => (b ? resolve(b) : reject(new Error("PNG encoding failed."))), mime);
     });
@@ -327,6 +379,15 @@ export async function compressImage(file, opts = {}) {
   let blob = await new Promise((resolve, reject) => {
     canvas.toBlob((b) => (b ? resolve(b) : reject(new Error("Encoding failed."))), mime, quality);
   });
+
+  // Same browser-substitution guard used by encodeCanvasSafely and
+  // convertImage above — canvas.toBlob silently returns PNG instead of
+  // erroring when the browser can't encode the requested type, which
+  // matters here now that compressImage can target AVIF, not just the
+  // near-universal JPG/WEBP it originally handled.
+  if (blob.type !== mime) {
+    throw new Error(`Your browser doesn't support encoding ${encodeFormat.toUpperCase()} images.`);
+  }
 
   if (opts.maxSizeBytes) {
     let attempts = 0;

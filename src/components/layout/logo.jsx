@@ -3,10 +3,10 @@ import Image from "next/image";
 export function Logo({ className = "size-7" }) {
   return (
     <Image
-      src="https://i.ibb.co.com/BdscVkK/vercel.jpg"
+      src="/logo.png"
       alt="Tools Root Logo"
-      width={28}
-      height={28}
+      width={48}
+      height={48}
       className={`${className} shrink-0 object-contain`}
       priority
     />

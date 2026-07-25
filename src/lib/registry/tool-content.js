@@ -93,7 +93,7 @@ const OVERRIDES = {
       {
         question: "Which formats can be compressed?",
         answer:
-          "JPG, PNG, and WEBP all support quality-adjustable compression here, covering the most common web and photo formats.",
+          "JPG, PNG, WEBP, BMP, and AVIF are all compressed while staying in their original format. GIF, TIFF, SVG, ICO, and HEIC don't have an adjustable-quality setting of their own to compress along, so uploading one of those converts it to JPG instead — a real format change, not just a smaller version of the original file.",
       },
       {
         question: "Is my image uploaded to a server?",
@@ -916,6 +916,11 @@ const OVERRIDES = {
         question: "Can I strip metadata from a photo before posting it publicly?",
         answer:
           "Yes, this is one of the most common reasons to use this tool — removing GPS and camera metadata before sharing a photo on social media or a public website, so that information isn't unintentionally exposed.",
+      },
+      {
+        question: "Does this work the same way for PNG and other formats, not just JPG?",
+        answer:
+          "Reading and displaying metadata (camera details, GPS, color profile) is currently JPG-specific, since that's where EXIF data most commonly lives. Stripping metadata works for any image format, including PNG — re-encoding through canvas removes whatever metadata was there regardless of the source format, even though this tool won't show you what it found beforehand for a non-JPG file. PNG can technically carry EXIF/GPS via a newer, less common chunk type, but it's uncommon in practice; PNGs are more likely to carry plain-text metadata like software name or an embedded AI generation prompt than camera or location data.",
       },
       {
         question: "Is my image uploaded to a server?",
@@ -2289,6 +2294,853 @@ const OVERRIDES = {
       },
     ],
     longDescription: "<h2>Why convert Word to PDF with Tools Root</h2><p>PDF is the standard format for sharing a finished document that shouldn't change on the recipient's end — the layout, fonts, and formatting stay locked in exactly as intended, regardless of what software or device someone opens it with.</p><h2>Real structural parsing, not an approximation</h2><p>This tool parses the DOCX file's actual OOXML structure directly, reading exact font sizes, colors, image positions, and table formatting, rather than relying on a lossy library that discards fine formatting details. That's why fonts, tables, and images come through matching the original precisely.</p><h2>Common use cases</h2><p>Converting a finished resume to PDF before submitting a job application, turning a report into PDF for distribution where formatting must stay fixed, preparing a Word-based contract for signing, or converting meeting notes into PDF for an official record.</p>",
+  },
+
+  // --------------------------------------------------- Image Converter (format pairs)
+  "jpg-to-png": {
+    howItWorks: {
+      title: "How to convert JPG to PNG",
+      steps: [
+        "Upload one or more JPG images.",
+        "The output format is already set to PNG — no picker needed.",
+        "Click convert to render each image as a lossless PNG.",
+        "Download your PNG file, or all of them together as a ZIP.",
+      ],
+    },
+    faq: [
+      {
+        question: "Why convert a JPG to PNG instead of keeping it as JPG?",
+        answer:
+          "PNG is a lossless format, so it doesn't introduce the compression artifacts JPG does, and it supports transparency, which JPG can't represent at all. It's the right choice before further editing, or when a destination specifically requires PNG.",
+      },
+      {
+        question: "Will converting my JPG to PNG add transparency to it?",
+        answer:
+          "No — a JPG has no transparency data to begin with, so the converted PNG will still have a fully opaque background. PNG support for transparency matters starting from a source that already has it, like a PNG or a background-removed image.",
+      },
+      {
+        question: "Will the file size get bigger after converting to PNG?",
+        answer:
+          "Usually yes. PNG's lossless compression generally produces a larger file than JPG for photographic images, since JPG's lossy compression is specifically tuned to shrink photo-like content more aggressively.",
+      },
+      {
+        question: "Does converting JPG to PNG improve the image quality?",
+        answer:
+          "No — any quality already lost to JPG's lossy compression during the original save is already baked into the pixels and can't be recovered by switching formats. Converting just stops any further generational loss from future re-saves.",
+      },
+      {
+        question: "Can I convert several JPG files to PNG at once?",
+        answer:
+          "Yes, batch conversion is supported — upload multiple JPG files and download the converted PNGs individually or together as a ZIP.",
+      },
+      {
+        question: "Is my photo uploaded to a server?",
+        answer:
+          "No. Conversion runs locally in your browser using JavaScript and WebAssembly. Your image is never transmitted anywhere.",
+      },
+    ],
+    longDescription: "<h2>Why convert JPG to PNG with Tools Root</h2><p>PNG's lossless compression and support for transparency make it the better choice before further editing, or whenever a destination — a design tool, a print workflow, a website that needs a transparent logo — specifically calls for PNG instead of JPG.</p><h2>A dedicated page, the same real engine</h2><p>This page uses the identical browser-based conversion engine as the all-in-one Image Converter, just with PNG pre-selected as the output so there's no format picker to navigate through first.</p><h2>Common use cases</h2><p>Preparing a JPG photo for further editing in software that works better with lossless input, converting a JPG logo to PNG before adding transparency in an image editor, meeting a platform's requirement for PNG uploads specifically, or archiving a photo in a format that won't degrade further on repeated saves.</p>",
+  },
+  "png-to-jpg": {
+    howItWorks: {
+      title: "How to convert PNG to JPG",
+      steps: [
+        "Upload one or more PNG images.",
+        "The output format is already set to JPG — no picker needed.",
+        "Adjust the quality slider if you want a different size-versus-quality balance.",
+        "Download your JPG file, or all of them together as a ZIP.",
+      ],
+    },
+    faq: [
+      {
+        question: "Why convert PNG to JPG?",
+        answer:
+          "JPG files are typically much smaller than PNG for photographic content, which matters for faster website loading, smaller email attachments, or meeting a platform's file size limit — at the cost of PNG's lossless quality and transparency support.",
+      },
+      {
+        question: "What happens to transparency in my PNG when I convert to JPG?",
+        answer:
+          "JPG doesn't support transparency at all, so any transparent areas in the source PNG are filled with a solid background (typically white) in the converted JPG. If you need to keep transparency, PNG or WEBP are better targets.",
+      },
+      {
+        question: "Will I lose quality converting PNG to JPG?",
+        answer:
+          "Yes, JPG uses lossy compression, so some quality is traded for the smaller file size. The quality slider lets you control exactly how much — higher settings keep more detail at a larger file size, lower settings shrink the file further.",
+      },
+      {
+        question: "How much smaller will the JPG be compared to the original PNG?",
+        answer:
+          "It varies significantly with image content, but photographic PNGs often shrink substantially when converted to JPG, since JPG's compression is specifically tuned for photo-like detail rather than PNG's flat, lossless encoding.",
+      },
+      {
+        question: "Can I convert a whole batch of PNGs to JPG at once?",
+        answer:
+          "Yes, upload multiple PNG files and the same quality setting applies to all of them, with results downloadable individually or as a single ZIP.",
+      },
+      {
+        question: "Is my image uploaded to a server?",
+        answer:
+          "No. Conversion runs locally in your browser using JavaScript and WebAssembly. Your image is never transmitted anywhere.",
+      },
+    ],
+    longDescription: "<h2>Why convert PNG to JPG with Tools Root</h2><p>PNG files, especially for photographic content, are often far larger than they need to be for how the image will actually be used — a JPG at a sensible quality setting looks nearly identical on screen while taking up a fraction of the storage or bandwidth.</p><h2>Quality-adjustable, not a fixed conversion</h2><p>Rather than a single fixed compression level, a quality slider lets you choose exactly how much to trade file size for visual fidelity, so you can find the smallest JPG that still looks right for your use.</p><h2>Common use cases</h2><p>Shrinking a batch of PNG screenshots before attaching them to an email, converting product photos from PNG to JPG to speed up an online store's load time, preparing a photo for a platform with a strict upload size limit, or reducing storage space taken up by a large folder of PNG images.</p>",
+  },
+  "jpg-to-webp": {
+    howItWorks: {
+      title: "How to convert JPG to WEBP",
+      steps: [
+        "Upload one or more JPG photos.",
+        "The output format is already set to WEBP — no picker needed.",
+        "Adjust the quality slider if you want a different size-versus-quality balance.",
+        "Download your WEBP file, or all of them together as a ZIP.",
+      ],
+    },
+    faq: [
+      {
+        question: "Why convert JPG to WEBP?",
+        answer:
+          "WEBP generally produces a smaller file than JPG at a comparable visual quality, which is why most modern websites prefer it for faster page loading. It's a direct upgrade in most cases where broad legacy-browser support isn't a concern.",
+      },
+      {
+        question: "Does every browser support WEBP images?",
+        answer:
+          "Support is very broad across modern browsers, but if you specifically need compatibility with very old software or systems, JPG remains the more universally recognized format.",
+      },
+      {
+        question: "How much smaller is WEBP compared to JPG?",
+        answer:
+          "It varies by image, but WEBP frequently achieves a meaningfully smaller file size than JPG at a similar visual quality level, which is the main reason websites convert to it for performance.",
+      },
+      {
+        question: "Will converting to WEBP make my photo look worse?",
+        answer:
+          "At the default quality setting, differences from the source JPG are typically hard to spot on screen. The quality slider lets you fine-tune the tradeoff if you want to prioritize either smaller size or higher fidelity.",
+      },
+      {
+        question: "Can I convert many JPG photos to WEBP at once?",
+        answer:
+          "Yes, batch conversion is supported — upload multiple JPG files and download the converted WEBP images individually or together as a ZIP.",
+      },
+      {
+        question: "Is my photo uploaded to a server?",
+        answer:
+          "No. Conversion runs locally in your browser using JavaScript and WebAssembly. Your image is never transmitted anywhere.",
+      },
+    ],
+    longDescription: "<h2>Why convert JPG to WEBP with Tools Root</h2><p>Website performance and page-load speed depend heavily on image file size, and WEBP was specifically designed to beat JPG on that front at a comparable visual quality — which is why it's become the default recommendation for web images.</p><h2>Real WEBP encoding, quality-adjustable</h2><p>Conversion uses the browser's native WEBP encoder with an adjustable quality setting, so you can dial in the exact balance between file size and visual fidelity your use case needs.</p><h2>Common use cases</h2><p>Converting a batch of product photos to WEBP to speed up an e-commerce site, preparing blog images in a smaller format for faster page loads, reducing bandwidth costs for a photo-heavy website, or modernizing an old JPG image library to a more efficient format.</p>",
+  },
+  "webp-to-png": {
+    howItWorks: {
+      title: "How to convert WEBP to PNG",
+      steps: [
+        "Upload one or more WEBP images.",
+        "The output format is already set to PNG — no picker needed.",
+        "Click convert to render each image as a lossless PNG.",
+        "Download your PNG file, or all of them together as a ZIP.",
+      ],
+    },
+    faq: [
+      {
+        question: "Why would I convert WEBP to PNG?",
+        answer:
+          "WEBP is efficient but not universally recognized by every piece of older software, some design tools, or certain upload systems that specifically require PNG or JPG. Converting to PNG maximizes compatibility, and preserves transparency if the source WEBP had it.",
+      },
+      {
+        question: "Does the converted PNG keep transparency from the WEBP?",
+        answer:
+          "Yes, if the source WEBP image includes transparency, that transparency carries over correctly to the converted PNG, since both formats support it.",
+      },
+      {
+        question: "Will the file get bigger after converting to PNG?",
+        answer:
+          "Generally yes — PNG's lossless compression typically produces a larger file than WEBP's more efficient compression, especially for photographic content.",
+      },
+      {
+        question: "Does converting WEBP to PNG lose any quality?",
+        answer:
+          "If the source WEBP was saved with lossy compression, that quality loss is already present and won't be reversed by converting formats. If the WEBP was saved losslessly, no further quality is lost in the conversion.",
+      },
+      {
+        question: "Can I convert multiple WEBP images to PNG at once?",
+        answer:
+          "Yes, batch conversion is supported — upload multiple WEBP files and download the converted PNGs individually or together as a ZIP.",
+      },
+      {
+        question: "Is my image uploaded to a server?",
+        answer:
+          "No. Conversion runs locally in your browser using JavaScript and WebAssembly. Your image is never transmitted anywhere.",
+      },
+    ],
+    longDescription: "<h2>Why convert WEBP to PNG with Tools Root</h2><p>Not every piece of software or upload system recognizes WEBP yet, and some design and editing workflows specifically expect PNG. Converting closes that compatibility gap while keeping transparency intact.</p><h2>Transparency preserved, lossless output</h2><p>The conversion correctly carries over any transparency present in the source WEBP, and produces a genuinely lossless PNG rather than a re-compressed approximation.</p><h2>Common use cases</h2><p>Converting a WEBP graphic for use in design software that doesn't accept WEBP input, preparing a transparent WEBP logo for a platform that only accepts PNG uploads, maximizing compatibility before sharing an image with someone using older software, or archiving a WEBP image in a more universally recognized format.</p>",
+  },
+  "heic-to-jpg": {
+    howItWorks: {
+      title: "How to convert HEIC to JPG",
+      steps: [
+        "Upload one or more HEIC photos (the default format for recent iPhone photos).",
+        "The output format is already set to JPG — no picker needed.",
+        "Adjust the quality slider if you want a different size-versus-quality balance.",
+        "Download your JPG file, or all of them together as a ZIP.",
+      ],
+    },
+    faq: [
+      {
+        question: "Why do my iPhone photos need converting from HEIC?",
+        answer:
+          "HEIC is Apple's default photo format since iOS 11, and while Apple's own devices and recent software handle it fine, a lot of older software, some Windows systems, many websites, and various upload forms still don't recognize it — converting to the near-universal JPG avoids that problem entirely.",
+      },
+      {
+        question: "Does converting HEIC to JPG lose photo quality?",
+        answer:
+          "Some quality change is inherent to going from HEIC's efficient compression to JPG's compression, but at a reasonable quality setting the difference is generally not noticeable in normal viewing.",
+      },
+      {
+        question: "Can I convert multiple HEIC photos to JPG at once?",
+        answer:
+          "Yes, batch conversion is supported — upload as many HEIC photos as you need converted, and download them individually or together as a ZIP.",
+      },
+      {
+        question: "Will the converted JPG be smaller or larger than the original HEIC?",
+        answer:
+          "It depends on the quality setting chosen, but HEIC's compression is generally more space-efficient than JPG's, so the converted JPG is often somewhat larger than the original HEIC file at a comparable visual quality.",
+      },
+      {
+        question: "Does this work for HEIC photos from any iPhone, or only newer models?",
+        answer:
+          "It works for standard HEIC files regardless of which iPhone model produced them, since HEIC has been Apple's default photo format since iOS 11 across the whole device lineup.",
+      },
+      {
+        question: "What if my HEIC came from a Live Photo or burst shot?",
+        answer:
+          "A Live Photo or burst HEIC actually contains multiple images bundled together. This tool converts the primary still frame to JPG; the additional frames aren't included in the output. If you specifically need the motion or every burst frame, exporting from the Photos app as a standard photo first, or working from a still frame you've already selected, avoids losing anything unexpected.",
+      },
+      {
+        question: "Is my photo uploaded to a server?",
+        answer:
+          "No. Conversion runs locally in your browser using JavaScript and WebAssembly. Your photo is never transmitted anywhere.",
+      },
+    ],
+    longDescription: "<h2>Why convert HEIC to JPG with Tools Root</h2><p>An iPhone saves photos as HEIC by default, and while that format is efficient, it isn't recognized everywhere — a work computer running older software, a website upload form, or a colleague on Windows can all run into a photo that simply won't open. Converting to JPG sidesteps that entirely.</p><h2>Real HEIC decoding, not a workaround</h2><p>This tool genuinely decodes HEIC's actual image data before re-encoding it as JPG, rather than relying on a browser's native (often absent) HEIC support — which is why it works consistently regardless of which browser or operating system you're using it from.</p><h2>Common use cases</h2><p>Converting iPhone photos to JPG before uploading them to a website that rejects HEIC files, preparing a batch of vacation photos for a colleague or family member on an older device, making sure photos display correctly across every platform they'll be shared on, or converting an old HEIC photo library into a more universally compatible format.</p>",
+  },
+  "png-to-webp": {
+    howItWorks: {
+      title: "How to convert PNG to WEBP",
+      steps: [
+        "Upload one or more PNG images.",
+        "The output format is already set to WEBP — no picker needed.",
+        "Adjust the quality slider if you want a different size-versus-quality balance.",
+        "Download your WEBP file, or all of them together as a ZIP.",
+      ],
+    },
+    faq: [
+      {
+        question: "Why convert PNG to WEBP?",
+        answer:
+          "WEBP typically produces a meaningfully smaller file than PNG while still supporting transparency, which makes it a strong upgrade for website images specifically — faster page loads without losing the transparent background PNG is often chosen for in the first place.",
+      },
+      {
+        question: "Does WEBP keep transparency the same way PNG does?",
+        answer:
+          "Yes, WEBP fully supports transparency, so a transparent PNG (like a logo or icon) converts to WEBP with its transparent areas intact.",
+      },
+      {
+        question: "How much smaller will my WEBP file be than the PNG?",
+        answer:
+          "It varies by image content, but WEBP often achieves a considerably smaller file size than PNG, especially for images with a lot of detail, while keeping comparable visual quality.",
+      },
+      {
+        question: "Is WEBP lossy or lossless?",
+        answer:
+          "WEBP supports both. This tool uses WEBP's lossy mode with an adjustable quality slider, which generally gives the best size savings — if you need guaranteed pixel-perfect output, keeping the source as PNG is the safer choice.",
+      },
+      {
+        question: "Can I convert several PNG files to WEBP at once?",
+        answer:
+          "Yes, batch conversion is supported — upload multiple PNG files and download the converted WEBP images individually or together as a ZIP.",
+      },
+      {
+        question: "Is my image uploaded to a server?",
+        answer:
+          "No. Conversion runs locally in your browser using JavaScript and WebAssembly. Your image is never transmitted anywhere.",
+      },
+    ],
+    longDescription: "<h2>Why convert PNG to WEBP with Tools Root</h2><p>PNG is the natural choice for images needing transparency, but its lossless compression means the file is often larger than it needs to be for how the image is actually displayed — particularly on a website, where every kilobyte affects load time.</p><h2>Transparency kept, file size reduced</h2><p>WEBP conversion here preserves any transparency present in the source PNG while applying WEBP's more efficient compression, giving you the same visual capability at a meaningfully smaller file size.</p><h2>Common use cases</h2><p>Converting a transparent PNG logo to WEBP for faster website loading, preparing icon sets in a smaller format for a web app, reducing the file size of PNG graphics across a whole site for better performance, or modernizing a PNG-heavy image library to a more efficient modern format.</p>",
+  },
+  "svg-to-png": {
+    howItWorks: {
+      title: "How to convert SVG to PNG",
+      steps: [
+        "Upload an SVG vector graphic.",
+        "The output format is already set to PNG — no picker needed.",
+        "Click convert to render the vector as a fixed-resolution PNG.",
+        "Download your PNG file.",
+      ],
+    },
+    faq: [
+      {
+        question: "Why convert SVG to PNG?",
+        answer:
+          "SVG is a vector format that many platforms — social media, older software, certain email clients, some CMS image fields — don't accept directly. Converting to PNG produces a standard raster image that's universally supported, at the cost of the SVG's infinite scalability.",
+      },
+      {
+        question: "What resolution will the converted PNG be?",
+        answer:
+          "The PNG is rendered based on the SVG's own defined dimensions. If you need a specific larger size, resizing the SVG's viewBox before conversion, or using the Resize Image tool afterward, gives you control over the final pixel dimensions.",
+      },
+      {
+        question: "Will the PNG look as sharp as the original SVG?",
+        answer:
+          "At the resolution it's rendered at, yes — the conversion draws the vector precisely at that size. Unlike the SVG itself, though, the resulting PNG is a fixed size and will lose sharpness if scaled up significantly afterward, since raster images don't scale the way vectors do.",
+      },
+      {
+        question: "Does the PNG keep transparency from my SVG?",
+        answer:
+          "Yes, any transparent areas defined in the SVG carry over correctly to the converted PNG's alpha channel.",
+      },
+      {
+        question: "Can I convert multiple SVG files at once?",
+        answer:
+          "Yes, batch conversion is supported — upload multiple SVG files and download the converted PNGs individually or together as a ZIP.",
+      },
+      {
+        question: "Is my file uploaded to a server?",
+        answer:
+          "No. Conversion runs locally in your browser using JavaScript and WebAssembly. Your file is never transmitted anywhere.",
+      },
+    ],
+    longDescription: "<h2>Why convert SVG to PNG with Tools Root</h2><p>SVG's infinite scalability is exactly what makes it awkward for platforms expecting a standard raster image — social media uploaders, older editing software, and many CMS or form fields simply want a fixed-resolution PNG instead.</p><h2>Real vector rendering, not a placeholder</h2><p>This tool genuinely renders the SVG's actual vector paths and fills at its defined dimensions before converting to PNG, rather than treating it as an opaque file — which is why complex vector graphics with gradients, curves, and text come through correctly.</p><h2>Common use cases</h2><p>Converting a logo designed as SVG into PNG for a platform that only accepts raster uploads, preparing a vector icon for use in software that doesn't support SVG import, generating a fixed-size PNG version of a scalable graphic for consistent display, or exporting an SVG illustration for sharing somewhere that expects a standard image file.</p>",
+  },
+  "avif-to-jpg": {
+    howItWorks: {
+      title: "How to convert AVIF to JPG",
+      steps: [
+        "Upload one or more AVIF images.",
+        "The output format is already set to JPG — no picker needed.",
+        "Adjust the quality slider if you want a different size-versus-quality balance.",
+        "Download your JPG file, or all of them together as a ZIP.",
+      ],
+    },
+    faq: [
+      {
+        question: "Why would I need to convert AVIF to JPG?",
+        answer:
+          "AVIF is a newer, highly efficient format, but it isn't recognized everywhere yet — some older software, certain editing tools, and various upload systems still expect the far more universally supported JPG instead.",
+      },
+      {
+        question: "Will converting AVIF to JPG make the file bigger?",
+        answer:
+          "Often yes, since AVIF's compression is generally more space-efficient than JPG's at a comparable visual quality, so gaining broader compatibility usually comes with some increase in file size.",
+      },
+      {
+        question: "Does converting lose image quality?",
+        answer:
+          "Some change is inherent in re-encoding from one lossy format to another, but at a reasonable quality setting it's typically not noticeable during normal viewing.",
+      },
+      {
+        question: "Can I convert several AVIF images to JPG at once?",
+        answer:
+          "Yes, batch conversion is supported — upload multiple AVIF files and download the converted JPGs individually or together as a ZIP.",
+      },
+      {
+        question: "Does every browser support opening AVIF files to begin with?",
+        answer:
+          "Support has grown substantially in modern browsers, but if you're specifically running into software or a platform that can't open an AVIF file at all, converting to JPG resolves that immediately.",
+      },
+      {
+        question: "Is my photo uploaded to a server?",
+        answer:
+          "No. Conversion runs locally in your browser using JavaScript and WebAssembly. Your image is never transmitted anywhere.",
+      },
+    ],
+    longDescription: "<h2>Why convert AVIF to JPG with Tools Root</h2><p>AVIF is genuinely more efficient than JPG, but that efficiency doesn't help if the software or platform you need to use simply doesn't recognize the format yet. Converting to JPG trades some of that efficiency for support that's effectively universal.</p><h2>Real AVIF decoding, quality-adjustable output</h2><p>The source AVIF is properly decoded before re-encoding, with a quality slider on the JPG output so you can balance file size against visual fidelity for your specific use.</p><h2>Common use cases</h2><p>Converting AVIF images for use in editing software that doesn't yet support the format, preparing photos for an upload system that specifically expects JPG, maximizing compatibility before sharing an image with someone on older software, or converting a batch of AVIF web images back to JPG for a legacy workflow.</p>",
+  },
+  "gif-to-png": {
+    howItWorks: {
+      title: "How to convert GIF to PNG",
+      steps: [
+        "Upload one or more GIF images.",
+        "The output format is already set to PNG — no picker needed.",
+        "Click convert to capture the GIF's first frame as a static PNG.",
+        "Download your PNG file, or all of them together as a ZIP.",
+      ],
+    },
+    faq: [
+      {
+        question: "What happens to animation when I convert an animated GIF to PNG?",
+        answer:
+          "PNG is a static image format, so converting an animated GIF captures its first frame only, producing a single still image rather than a moving one. If you specifically need every frame extracted, that's a different kind of tool than a straight format conversion.",
+      },
+      {
+        question: "Why would I want to convert a GIF to PNG?",
+        answer:
+          "PNG generally gives sharper image quality than GIF, since GIF is limited to a 256-color palette while PNG supports full color depth and true transparency, useful when you need a static image rather than an animation.",
+      },
+      {
+        question: "Will the PNG look better than the original GIF?",
+        answer:
+          "For the captured frame, potentially yes — PNG's lossless, full-color-depth encoding can represent the frame's color more accurately than GIF's limited palette, though the improvement depends on how much the source image actually needed more than 256 colors.",
+      },
+      {
+        question: "Does the PNG keep transparency from the GIF?",
+        answer:
+          "Yes, if the source GIF's first frame includes transparency, that transparency carries over to the converted PNG.",
+      },
+      {
+        question: "Can I convert multiple GIF files to PNG at once?",
+        answer:
+          "Yes, batch conversion is supported — upload multiple GIF files and download the converted PNGs individually or together as a ZIP.",
+      },
+      {
+        question: "Is my file uploaded to a server?",
+        answer:
+          "No. Conversion runs locally in your browser using JavaScript and WebAssembly. Your file is never transmitted anywhere.",
+      },
+    ],
+    longDescription: "<h2>Why convert GIF to PNG with Tools Root</h2><p>Sometimes what looks like a GIF is really just a static image saved in the wrong format, or only the first frame of an animation is actually needed. Converting to PNG gives you a proper static image with better color depth than GIF's limited palette allows.</p><h2>A clean capture of the first frame</h2><p>The conversion reads the GIF's first frame and re-encodes it as a genuine, lossless PNG, correctly preserving any transparency the frame contains.</p><h2>Common use cases</h2><p>Extracting a static thumbnail image from an animated GIF, converting a non-animated GIF into a more standard PNG format, preparing a still preview image from an animated graphic, or improving color fidelity by moving a GIF's content into PNG's full color depth.</p>",
+  },
+  "bmp-to-jpg": {
+    howItWorks: {
+      title: "How to convert BMP to JPG",
+      steps: [
+        "Upload one or more BMP images.",
+        "The output format is already set to JPG — no picker needed.",
+        "Adjust the quality slider if you want a different size-versus-quality balance.",
+        "Download your JPG file, or all of them together as a ZIP.",
+      ],
+    },
+    faq: [
+      {
+        question: "Why convert BMP to JPG?",
+        answer:
+          "BMP files store image data with little to no compression, making them dramatically larger than they need to be for most uses. Converting to JPG can shrink the file drastically, at the cost of BMP's lossless storage.",
+      },
+      {
+        question: "How much smaller will the JPG be than the original BMP?",
+        answer:
+          "Often dramatically smaller — BMP is essentially uncompressed, so converting to JPG's compressed format frequently reduces file size by a large margin, especially for higher-resolution images.",
+      },
+      {
+        question: "Will I lose quality converting BMP to JPG?",
+        answer:
+          "Yes, JPG's lossy compression trades some quality for the smaller file size. The quality slider lets you control how much — a high setting keeps the result visually very close to the original BMP.",
+      },
+      {
+        question: "Why do I even have a BMP file in the first place?",
+        answer:
+          "BMP is an older Windows-native format still produced by some legacy software, certain scanning and imaging tools, and specific technical workflows — it's less commonly the default in modern consumer software.",
+      },
+      {
+        question: "Can I convert multiple BMP files to JPG at once?",
+        answer:
+          "Yes, batch conversion is supported — upload multiple BMP files and download the converted JPGs individually or together as a ZIP.",
+      },
+      {
+        question: "Is my file uploaded to a server?",
+        answer:
+          "No. Conversion runs locally in your browser using JavaScript and WebAssembly. Your file is never transmitted anywhere.",
+      },
+    ],
+    longDescription: "<h2>Why convert BMP to JPG with Tools Root</h2><p>BMP stores images with minimal compression, which means even a modest photo can produce a surprisingly large file. Converting to JPG applies real compression tuned for photographic content, often shrinking the file dramatically.</p><h2>Quality-adjustable compression</h2><p>Rather than a single fixed conversion, a quality slider lets you choose exactly how much to compress, so you can find the smallest JPG that still looks right for your use.</p><h2>Common use cases</h2><p>Shrinking an uncompressed BMP scan or screenshot before sharing it, converting legacy BMP images from older software into a modern, compact format, reducing storage space taken up by a folder of BMP files, or preparing a BMP image for a platform that only accepts JPG uploads.</p>",
+  },
+  "tiff-to-jpg": {
+    howItWorks: {
+      title: "How to convert TIFF to JPG",
+      steps: [
+        "Upload one or more TIFF images.",
+        "The output format is already set to JPG — no picker needed.",
+        "Adjust the quality slider if you want a different size-versus-quality balance.",
+        "Download your JPG file, or all of them together as a ZIP.",
+      ],
+    },
+    faq: [
+      {
+        question: "Why convert TIFF to JPG?",
+        answer:
+          "TIFF files, common in printing, scanning, and professional photography workflows, are often very large and aren't well supported by web browsers or general-purpose software. Converting to JPG produces a much smaller, near-universally compatible file.",
+      },
+      {
+        question: "Is TIFF support consistent across all browsers?",
+        answer:
+          "TIFF is not as consistently supported for direct browser viewing as JPG or PNG, which is part of why converting to JPG is useful for anything that needs to display reliably on the web.",
+      },
+      {
+        question: "Will I lose quality converting TIFF to JPG?",
+        answer:
+          "Yes, JPG's lossy compression trades away some of TIFF's typically lossless quality for a much smaller file. The quality slider lets you keep that loss minimal if fidelity matters for your use.",
+      },
+      {
+        question: "How much smaller will the JPG file be?",
+        answer:
+          "Often substantially smaller — TIFF files, especially uncompressed or lightly compressed ones from scanners and cameras, can be many times larger than a JPG at a comparable visual quality.",
+      },
+      {
+        question: "Can I convert several TIFF files to JPG at once?",
+        answer:
+          "Yes, batch conversion is supported — upload multiple TIFF files and download the converted JPGs individually or together as a ZIP.",
+      },
+      {
+        question: "Is my file uploaded to a server?",
+        answer:
+          "No. Conversion runs locally in your browser using JavaScript and WebAssembly. Your file is never transmitted anywhere.",
+      },
+    ],
+    longDescription: "<h2>Why convert TIFF to JPG with Tools Root</h2><p>TIFF is a mainstay of scanning, printing, and professional photography specifically because of its high-fidelity, often lossless storage — but that same quality makes for large files that browsers and everyday software don't handle as gracefully as JPG.</p><h2>Quality-adjustable, dramatically smaller</h2><p>Converting to JPG with an adjustable quality setting lets you shrink a TIFF scan or photo down to a size that's practical for sharing or web use, while keeping control over exactly how much detail is preserved.</p><h2>Common use cases</h2><p>Converting a high-resolution scanned document from TIFF to a shareable JPG, shrinking professional camera TIFF files for web or email use, preparing a TIFF-based print file for a workflow that expects JPG instead, or reducing storage space taken up by a folder of large TIFF scans.</p>",
+  },
+
+  // ---------------------------------------------------- Audio Converter (format pairs)
+  "mp4-to-mp3": {
+    howItWorks: {
+      title: "How to convert MP4 to MP3",
+      steps: [
+        "Upload your MP4 video file.",
+        "The output format is already set to MP3 — no picker needed.",
+        "Click extract to pull the audio track out of the video.",
+        "Download your MP3 file.",
+      ],
+    },
+    faq: [
+      {
+        question: "Does converting MP4 to MP3 keep the video too?",
+        answer:
+          "No — this pulls out only the audio track and discards the video portion entirely, producing a standalone MP3 audio file. If you need to keep both, this isn't the right tool; it's specifically for isolating the sound.",
+      },
+      {
+        question: "Why would I want just the audio from an MP4?",
+        answer:
+          "Common reasons include turning a recorded video interview into a podcast-ready audio file, pulling a song or soundtrack out of a music video, extracting a lecture's audio for offline listening without the video, or isolating dialogue for editing.",
+      },
+      {
+        question: "Will the audio quality be as good as the original MP4's soundtrack?",
+        answer:
+          "Extraction preserves the quality present in the source video's audio stream — this doesn't add compression loss beyond what MP3 encoding itself involves, so the result reflects the original recording's actual audio quality.",
+      },
+      {
+        question: "How long can the MP4 file be?",
+        answer:
+          "There's no artificial length limit imposed by this tool. Processing time and memory use scale with the video's length and your device's own capability, since everything runs on your hardware rather than a shared server.",
+      },
+      {
+        question: "Can I extract audio from more than one MP4 at a time?",
+        answer:
+          "This tool processes one video at a time to keep the interface simple and focused. For converting many files, running them through one at a time takes just a few clicks each.",
+      },
+      {
+        question: "Is my video uploaded to a server?",
+        answer:
+          "No. Extraction runs locally in your browser using a real FFmpeg engine compiled to WebAssembly. Your video is never transmitted anywhere.",
+      },
+    ],
+    longDescription: "<h2>Why convert MP4 to MP3 with Tools Root</h2><p>Sometimes only the sound matters — a recorded video interview isn't needed for a podcast release, a music video's soundtrack needs to become a normal audio file, or a lecture recording is more useful as an audio-only file for offline listening. This tool pulls the audio track directly out of an MP4 file.</p><h2>Real stream demuxing, not a re-recording</h2><p>The audio track is extracted directly from the MP4 container using a genuine FFmpeg engine, preserving the original audio quality present in the source rather than approximating it through any kind of re-recording process.</p><h2>Common use cases</h2><p>Turning a recorded video interview into a podcast-ready MP3, pulling a song's audio out of a music video file, extracting a webinar or lecture's audio for offline listening, or isolating a video's dialogue track for further audio editing.</p>",
+  },
+  "mov-to-mp3": {
+    howItWorks: {
+      title: "How to convert MOV to MP3",
+      steps: [
+        "Upload your MOV video file, like footage recorded on an iPhone.",
+        "The output format is already set to MP3 — no picker needed.",
+        "Click extract to pull the audio track out of the video.",
+        "Download your MP3 file.",
+      ],
+    },
+    faq: [
+      {
+        question: "Why would I need to convert a MOV file to MP3?",
+        answer:
+          "MOV is the default video format on iPhones and Macs, so when only the audio from an iPhone video matters — a voice memo accidentally recorded as video, a musical performance, spoken notes — extracting it to MP3 gives you a standalone, more broadly usable audio file.",
+      },
+      {
+        question: "Does this keep the original video file intact?",
+        answer:
+          "Yes, this only reads the audio track out of the MOV file to create a new MP3; it doesn't modify or delete your original video.",
+      },
+      {
+        question: "Will the extracted MP3 sound as good as the audio in the original MOV?",
+        answer:
+          "The extraction preserves the audio quality already present in the source recording — this step doesn't degrade it beyond the inherent compression of MP3 encoding itself.",
+      },
+      {
+        question: "Can I extract audio from a long MOV video, like a full recorded event?",
+        answer:
+          "Yes, there's no artificial length limit — processing time depends on the video's length and your device's own performance, since everything runs locally rather than on a remote server.",
+      },
+      {
+        question: "What if my MOV file doesn't actually have an audio track?",
+        answer:
+          "If the source video was recorded without sound, there's no audio track to extract, and the tool won't be able to produce a meaningful MP3 from it.",
+      },
+      {
+        question: "Is my video uploaded to a server?",
+        answer:
+          "No. Extraction runs locally in your browser using a real FFmpeg engine compiled to WebAssembly. Your video is never transmitted anywhere.",
+      },
+    ],
+    longDescription: "<h2>Why convert MOV to MP3 with Tools Root</h2><p>MOV is what an iPhone or Mac saves video as by default, and it's common to end up with audio-only content trapped inside a MOV file — a voice memo captured as video by accident, a live performance recording, or spoken notes. This tool pulls just the sound out.</p><h2>Direct extraction from Apple's native format</h2><p>The audio track is demuxed directly from the MOV container using a genuine FFmpeg engine, correctly handling Apple's format without needing any intermediate conversion step first.</p><h2>Common use cases</h2><p>Extracting a voice memo that was accidentally recorded as a MOV video, pulling the audio from an iPhone-recorded live performance, isolating spoken notes captured on video for a text transcript later, or converting a MOV interview recording into a standalone MP3 for easier sharing.</p>",
+  },
+  "wav-to-mp3": {
+    howItWorks: {
+      title: "How to convert WAV to MP3",
+      steps: [
+        "Upload your WAV audio file.",
+        "The output format is already set to MP3 — no picker needed.",
+        "Click convert to compress the file to MP3.",
+        "Download your MP3 file.",
+      ],
+    },
+    faq: [
+      {
+        question: "Why convert WAV to MP3?",
+        answer:
+          "WAV files are uncompressed and therefore quite large, while MP3 compresses audio dramatically with only modest quality tradeoffs — useful for sharing over email, uploading somewhere with a size limit, or general listening where the smaller file size matters more than perfect fidelity.",
+      },
+      {
+        question: "How much smaller will the MP3 be than the original WAV?",
+        answer:
+          "Substantially smaller in most cases — WAV stores audio with no compression at all, so converting to MP3 commonly reduces file size dramatically, often to a small fraction of the original.",
+      },
+      {
+        question: "Will converting to MP3 make the audio sound noticeably worse?",
+        answer:
+          "MP3 is a lossy format, so some quality is technically lost, but at standard bitrates the difference is generally not obvious during normal listening. It's more likely to matter to an audio engineer doing detailed mixing work than to someone just listening back to a recording.",
+      },
+      {
+        question: "Should I keep my original WAV file after converting?",
+        answer:
+          "If you might need to edit the audio further, or want the option to convert to a different format later without additional generational loss, keeping the original lossless WAV around is generally a good idea alongside the compressed MP3.",
+      },
+      {
+        question: "Can I convert several WAV files to MP3 at once?",
+        answer:
+          "This tool processes one file at a time to keep the interface simple. For several files, running each through takes just a few clicks per file.",
+      },
+      {
+        question: "Is my audio file uploaded to a server?",
+        answer:
+          "No. Conversion runs locally in your browser using a real FFmpeg engine compiled to WebAssembly. Your file is never transmitted anywhere.",
+      },
+    ],
+    longDescription: "<h2>Why convert WAV to MP3 with Tools Root</h2><p>WAV's uncompressed storage is great for editing and production, but it produces files far larger than necessary for ordinary listening, sharing, or uploading. Converting to MP3 shrinks the file dramatically while keeping the audio very listenable.</p><h2>A real FFmpeg encoder, standard bitrate output</h2><p>Conversion uses a genuine FFmpeg build compiled to WebAssembly to encode the MP3, the same underlying engine used by professional audio software, so the result matches what you'd get from installed desktop tools.</p><h2>Common use cases</h2><p>Shrinking a WAV recording before emailing it as an attachment, converting a batch of uncompressed voice memos into smaller MP3 files, preparing a lossless studio recording for casual sharing or streaming, or reducing storage space taken up by a folder of WAV files.</p>",
+  },
+  "mp3-to-wav": {
+    howItWorks: {
+      title: "How to convert MP3 to WAV",
+      steps: [
+        "Upload your MP3 audio file.",
+        "The output format is already set to WAV — no picker needed.",
+        "Click convert to produce an uncompressed WAV file.",
+        "Download your WAV file.",
+      ],
+    },
+    faq: [
+      {
+        question: "Why convert MP3 to WAV?",
+        answer:
+          "Some audio editing and production software works better with, or specifically requires, uncompressed WAV input rather than a compressed format like MP3 — converting gets your file into the format those tools expect.",
+      },
+      {
+        question: "Will converting MP3 to WAV improve the audio quality?",
+        answer:
+          "No — any quality already lost to MP3's lossy compression when the file was originally encoded is already baked into the audio and can't be recovered by converting to WAV. The conversion changes the container and encoding, not the underlying quality ceiling.",
+      },
+      {
+        question: "Will the WAV file be much larger than the original MP3?",
+        answer:
+          "Yes, typically substantially larger, since WAV stores audio without compression while MP3 is specifically compressed to be small — expect the WAV to be several times the size of the source MP3.",
+      },
+      {
+        question: "Why would editing software prefer WAV over MP3?",
+        answer:
+          "Uncompressed WAV avoids the generational quality loss that can accumulate from repeatedly decoding and re-encoding a lossy format during multiple rounds of editing, which is part of why production workflows often standardize on WAV internally even if the final output gets compressed later.",
+      },
+      {
+        question: "Can I convert several MP3 files to WAV at once?",
+        answer:
+          "This tool processes one file at a time to keep the interface simple. For several files, running each through takes just a few clicks per file.",
+      },
+      {
+        question: "Is my audio file uploaded to a server?",
+        answer:
+          "No. Conversion runs locally in your browser using a real FFmpeg engine compiled to WebAssembly. Your file is never transmitted anywhere.",
+      },
+    ],
+    longDescription: "<h2>Why convert MP3 to WAV with Tools Root</h2><p>Certain audio editing, production, and analysis software either strongly prefers or outright requires uncompressed WAV input, and this gets an MP3 into that format quickly.</p><h2>Genuine decoding and re-encoding</h2><p>The MP3 is properly decoded and written out as standard uncompressed WAV using a real FFmpeg engine, producing a file that opens correctly in any audio software that expects WAV.</p><h2>Common use cases</h2><p>Preparing an MP3 voice recording for import into audio editing software that expects WAV, converting a compressed audio file for use in an audio-processing pipeline that requires uncompressed input, standardizing a mixed collection of audio files into one consistent format for production work, or meeting a specific technical requirement for WAV input.</p>",
+  },
+
+  // ---------------------------------------------------- Video Converter (format pairs)
+  "mov-to-mp4": {
+    howItWorks: {
+      title: "How to convert MOV to MP4",
+      steps: [
+        "Upload your MOV video file, like footage recorded on an iPhone.",
+        "The output format is already set to MP4 — no picker needed.",
+        "Click convert to re-encode the video as MP4.",
+        "Download your MP4 file.",
+      ],
+    },
+    faq: [
+      {
+        question: "Why convert MOV to MP4?",
+        answer:
+          "MOV is Apple's native video format, and while it plays fine on Apple devices and much modern software, MP4 is the more universally supported format across older devices, various editing software, and upload systems that may not accept MOV directly.",
+      },
+      {
+        question: "Will converting from MOV to MP4 reduce video quality?",
+        answer:
+          "Converting for format compatibility alone, without changing resolution or bitrate, generally preserves quality closely, though any conversion between codecs involves some re-encoding.",
+      },
+      {
+        question: "Does the audio track convert along with the video?",
+        answer:
+          "Yes, the video's original audio track carries over into the converted MP4 file, not just the visual portion.",
+      },
+      {
+        question: "How long does converting a MOV file take?",
+        answer:
+          "Processing time depends on the video's length, resolution, and your device's own processing power, since encoding happens entirely on your hardware rather than a remote server.",
+      },
+      {
+        question: "Will the MP4 file be a different size than the original MOV?",
+        answer:
+          "File size can shift somewhat during conversion depending on the specific encoding settings involved, though it's not generally a dramatic change when converting for compatibility alone.",
+      },
+      {
+        question: "Is my video uploaded to a server?",
+        answer:
+          "No. Conversion runs locally in your browser using a real FFmpeg engine compiled to WebAssembly. Your video is never transmitted anywhere.",
+      },
+    ],
+    longDescription: "<h2>Why convert MOV to MP4 with Tools Root</h2><p>An iPhone or Mac saves video as MOV by default, and while Apple's own ecosystem handles it without issue, plenty of other software, older devices, and upload systems specifically expect MP4 instead. Converting closes that compatibility gap.</p><h2>A real FFmpeg engine, running on your device</h2><p>Video re-encoding uses a genuine FFmpeg build compiled to WebAssembly, the same engine underlying much of the professional video tooling world, so codec support and output quality match what you'd get from installed desktop software.</p><h2>Common use cases</h2><p>Converting an iPhone-recorded MOV video to MP4 before uploading it somewhere that requires broader compatibility, preparing MOV footage for editing software that works more reliably with MP4, sharing Apple-recorded video with someone using non-Apple devices, or standardizing a mixed video library into one consistent, widely-supported format.</p>",
+  },
+  "mp4-to-gif": {
+    howItWorks: {
+      title: "How to convert MP4 to GIF",
+      steps: [
+        "Upload your MP4 video clip — short clips under about 15 seconds work best.",
+        "The output format is already set to GIF — no picker needed.",
+        "Click convert to render the clip as an animated GIF.",
+        "Download your GIF file.",
+      ],
+    },
+    faq: [
+      {
+        question: "Is there a length limit for converting MP4 to GIF?",
+        answer:
+          "There's no hard limit enforced, but GIF compresses far less efficiently than real video codecs, so file size grows quickly with length — clips under roughly 15 seconds generally produce the most manageable results.",
+      },
+      {
+        question: "Why is the resulting GIF file so much larger than the source MP4?",
+        answer:
+          "GIF is a much older, less efficient format than MP4's modern video compression, so even a short clip can produce a comparatively large GIF file — this is inherent to the format, not specific to this conversion.",
+      },
+      {
+        question: "Does the converted GIF include the video's audio?",
+        answer:
+          "No — GIF is a purely visual format with no audio support at all, so any sound in the source MP4 is dropped entirely in the converted GIF.",
+      },
+      {
+        question: "Will the GIF loop automatically?",
+        answer:
+          "Yes, animated GIFs are designed to loop continuously by default, which is standard behavior across virtually every platform and viewer that displays them.",
+      },
+      {
+        question: "Can I convert just a portion of a longer MP4 to GIF?",
+        answer:
+          "This tool converts the full uploaded file. If you only want a specific segment of a longer video, trimming it down first with Trim Video, then converting the shorter clip here, gives you control over exactly what becomes the GIF.",
+      },
+      {
+        question: "Is my video uploaded to a server?",
+        answer:
+          "No. Conversion runs locally in your browser using a real FFmpeg engine compiled to WebAssembly. Your video is never transmitted anywhere.",
+      },
+    ],
+    longDescription: "<h2>Why convert MP4 to GIF with Tools Root</h2><p>A short, looping animated clip is often more useful for messaging, social sharing, or embedding in a place that doesn't support real video playback — GIF remains the format most universally supported for that specific purpose.</p><h2>Real frame-by-frame encoding</h2><p>The MP4 is genuinely re-encoded frame by frame into GIF's format using a real FFmpeg engine, rather than a simplified approximation, producing a properly looping animated result.</p><h2>Common use cases</h2><p>Turning a short, funny video moment into a shareable GIF for messaging, converting a screen-recording clip into a GIF for a tutorial or bug report, creating a looping animated preview from a longer video, or preparing a reaction clip in the one format that plays everywhere without needing a video player.</p>",
+  },
+  "avi-to-mp4": {
+    howItWorks: {
+      title: "How to convert AVI to MP4",
+      steps: [
+        "Upload your AVI video file.",
+        "The output format is already set to MP4 — no picker needed.",
+        "Click convert to re-encode the video as MP4.",
+        "Download your MP4 file.",
+      ],
+    },
+    faq: [
+      {
+        question: "Why convert AVI to MP4?",
+        answer:
+          "AVI is an older container format that isn't as consistently supported by modern software, mobile devices, and web platforms as MP4 is. Converting brings an older video file up to the format most things expect today.",
+      },
+      {
+        question: "Will an old AVI file still play correctly after converting to MP4?",
+        answer:
+          "Yes, the conversion re-encodes the video's actual content into MP4's format, so the result plays correctly and consistently across modern devices and software, including places the original AVI might not have opened at all.",
+      },
+      {
+        question: "Does converting AVI to MP4 reduce file size?",
+        answer:
+          "It depends on how the original AVI was encoded, but AVI files, especially older or less efficiently compressed ones, can sometimes shrink meaningfully when converted to MP4's more modern, efficient encoding.",
+      },
+      {
+        question: "Will the video and audio both convert correctly?",
+        answer:
+          "Yes, both the visual and audio tracks from the source AVI carry over into the converted MP4 file.",
+      },
+      {
+        question: "How long does converting an AVI file take?",
+        answer:
+          "Processing time depends on the video's length, resolution, and your device's own processing power, since encoding happens entirely on your hardware rather than a remote server.",
+      },
+      {
+        question: "Is my video uploaded to a server?",
+        answer:
+          "No. Conversion runs locally in your browser using a real FFmpeg engine compiled to WebAssembly. Your video is never transmitted anywhere.",
+      },
+    ],
+    longDescription: "<h2>Why convert AVI to MP4 with Tools Root</h2><p>AVI was once a dominant video format, but modern devices, editing software, and web platforms have largely moved on to MP4 as the default expectation. Converting an old AVI file to MP4 keeps it playable and usable going forward.</p><h2>A real FFmpeg engine, genuine re-encoding</h2><p>Conversion uses a genuine FFmpeg build compiled to WebAssembly to properly decode the AVI's video and audio streams and re-encode them as standard MP4, rather than a simplified container swap that wouldn't actually fix underlying compatibility issues.</p><h2>Common use cases</h2><p>Converting an old AVI video archive into a format that plays on current devices, preparing legacy AVI footage for import into modern editing software, sharing an older video file with someone whose software doesn't open AVI, or standardizing a mixed-format video library into one consistent, modern format.</p>",
+  },
+  "mkv-to-mp4": {
+    howItWorks: {
+      title: "How to convert MKV to MP4",
+      steps: [
+        "Upload your MKV video file.",
+        "The output format is already set to MP4 — no picker needed.",
+        "Click convert to re-encode the video as MP4.",
+        "Download your MP4 file.",
+      ],
+    },
+    faq: [
+      {
+        question: "Why convert MKV to MP4?",
+        answer:
+          "MKV is a flexible, feature-rich container popular for high-quality video and multiple audio/subtitle tracks, but it isn't supported as consistently as MP4 across mobile devices, some browsers, and various upload systems. Converting to MP4 maximizes compatibility.",
+      },
+      {
+        question: "Will I lose subtitle or multiple audio tracks converting MKV to MP4?",
+        answer:
+          "This conversion carries over the video and its primary audio track. MKV's support for multiple embedded subtitle and audio tracks is one of the format's distinguishing features, and a straightforward format conversion focuses on producing a standard playable MP4 rather than preserving every embedded extra track.",
+      },
+      {
+        question: "Does MP4 support the same video quality as MKV?",
+        answer:
+          "MP4 can contain the same modern video codecs MKV often uses, so quality itself isn't inherently limited by switching containers — the practical benefit of converting is compatibility, not a quality tradeoff either way.",
+      },
+      {
+        question: "Why don't all devices play MKV files directly?",
+        answer:
+          "MKV support varies more than MP4's across default media players, some mobile devices, and certain web platforms, which is exactly the gap converting to MP4 closes.",
+      },
+      {
+        question: "How long does converting an MKV file take?",
+        answer:
+          "Processing time depends on the video's length, resolution, and your device's own processing power, since encoding happens entirely on your hardware rather than a remote server.",
+      },
+      {
+        question: "Is my video uploaded to a server?",
+        answer:
+          "No. Conversion runs locally in your browser using a real FFmpeg engine compiled to WebAssembly. Your video is never transmitted anywhere.",
+      },
+    ],
+    longDescription: "<h2>Why convert MKV to MP4 with Tools Root</h2><p>MKV is a favorite for high-quality video with embedded extras like multiple subtitle tracks, but that flexibility comes at the cost of less consistent support across mobile devices, certain browsers, and various platforms that specifically expect MP4.</p><h2>A real FFmpeg engine, running on your device</h2><p>The MKV's video and audio streams are properly decoded and re-encoded into standard MP4 using a genuine FFmpeg build compiled to WebAssembly, producing a file that plays reliably wherever MP4 is expected.</p><h2>Common use cases</h2><p>Converting a downloaded MKV video for playback on a mobile device that doesn't support it well, preparing MKV footage for upload to a platform that requires MP4, sharing an MKV file with someone whose media player doesn't open it, or standardizing a mixed-format video collection into the most broadly compatible option.</p>",
   },
 };
 

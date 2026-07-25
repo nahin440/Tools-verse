@@ -51,9 +51,9 @@ export default function HomePage() {
   return (
     <div>
       {/* Hero */}
-      <section className="relative overflow-hidden border-b border-border">
+      <section className="relative z-20 border-b border-border">
         <div
-          className="pointer-events-none absolute inset-0 opacity-[0.4]"
+          className="pointer-events-none absolute inset-0 overflow-hidden opacity-[0.4]"
           style={{
             backgroundImage:
               "radial-gradient(circle at 15% 20%, var(--color-accent-tint) 0%, transparent 40%), radial-gradient(circle at 85% 0%, var(--color-accent-tint) 0%, transparent 35%)",
@@ -78,7 +78,7 @@ export default function HomePage() {
       </section>
 
       {/* Popular tools */}
-      <section className="mx-auto max-w-[1280px] px-4 py-16 sm:px-6">
+      <section className="relative z-10 mx-auto max-w-[1280px] px-4 py-16 sm:px-6">
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-semibold tracking-tight text-foreground">Most popular tools</h2>
         </div>
@@ -90,7 +90,7 @@ export default function HomePage() {
       </section>
 
       {/* Category navigation */}
-      <section className="border-y border-border bg-secondary/30">
+      <section id="categories" className="border-y border-border bg-secondary/30">
         <div className="mx-auto max-w-[1280px] px-4 py-16 sm:px-6">
           <h2 className="text-2xl font-semibold tracking-tight text-foreground">Browse by category</h2>
           <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -144,7 +144,7 @@ export default function HomePage() {
           <p className="mt-3 text-muted-foreground">No signup required. Pick a tool and try it now.</p>
           <div className="mt-6">
             <Button asChild variant="accent" size="lg">
-              <Link href="/pdf-tools">Browse all tools</Link>
+              <Link href="#categories">Browse all tools</Link>
             </Button>
           </div>
         </div>

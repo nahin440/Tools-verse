@@ -16,12 +16,14 @@ export async function generateMetadata({ params }) {
   const category = getCategoryBySlug(categorySlug);
   if (!category) return {};
 
+  const richTitle = `${category.label} — Free, No Sign-Up`;
+
   return {
-    title: category.label,
+    title: richTitle,
     description: category.description,
     alternates: { canonical: `/${category.slug}` },
     openGraph: {
-      title: `${category.label} — Tools Root`,
+      title: `${richTitle} | Tools Root`,
       description: category.description,
       url: `${SITE_URL}/${category.slug}`,
     },

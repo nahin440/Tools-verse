@@ -5,15 +5,6 @@ const emptyModulePath = fileURLToPath(new URL("./src/lib/empty-module.js", impor
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "i.ibb.co.com", // Change to "i.ibb.co" if that's the actual image URL
-      },
-    ],
-  },
-
   webpack: (config, { isServer, webpack }) => {
     if (!isServer) {
       config.plugins.push(

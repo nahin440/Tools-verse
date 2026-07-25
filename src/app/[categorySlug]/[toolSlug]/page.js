@@ -20,12 +20,22 @@ export async function generateMetadata({ params }) {
   const category = getCategoryBySlug(categorySlug);
   if (!tool || !category || tool.category !== category.key) return {};
 
+  // Google's search-result title display is roughly 60 characters before
+  // truncation. The full suffix fits every tool name except a handful of
+  // longer ones (the All-in-One converters, Extract Audio from Video), so
+  // those fall back to the shorter suffix instead of risking "No Sign-Up"
+  // or similar getting cut off mid-word in search results.
+  const fullSuffix = " Online Free — No Upload, No Sign-Up";
+  const shortSuffix = " — Free, No Upload";
+  const suffix = tool.name.length + fullSuffix.length <= 60 ? fullSuffix : shortSuffix;
+  const richTitle = `${tool.name}${suffix}`;
+
   return {
-    title: tool.name,
+    title: richTitle,
     description: tool.description,
     alternates: { canonical: `/${category.slug}/${tool.slug}` },
     openGraph: {
-      title: `${tool.name} — Tools Root`,
+      title: `${richTitle} | Tools Root`,
       description: tool.description,
     },
   };
