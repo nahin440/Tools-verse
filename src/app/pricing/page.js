@@ -11,7 +11,7 @@ export const metadata = {
 };
 
 const FEATURES = [
-  "All 50 tools, unlimited use",
+  "All 70 tools, unlimited use",
   "No file size caps beyond your device's own memory",
   "No watermarks on output files",
   "No signup or account required",

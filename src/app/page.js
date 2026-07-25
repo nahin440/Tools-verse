@@ -62,7 +62,7 @@ export default function HomePage() {
         <div className="relative mx-auto max-w-[1280px] px-4 py-20 text-center sm:px-6 sm:py-28">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
             <HiOutlineCheckCircle className="size-3.5 text-accent" />
-            50 tools, entirely free
+            70 tools, entirely free
           </span>
           <h1 className="font-display mx-auto mt-6 max-w-3xl text-4xl font-semibold tracking-tight text-balance text-foreground sm:text-6xl">
             Every file tool you need, in one place

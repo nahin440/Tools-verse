@@ -27,15 +27,15 @@ export function ToolSearchBar({ className }) {
   }, []);
 
   return (
-    <div ref={containerRef} className={cn("relative w-full max-w-xl", className)}>
-      <div className="relative">
-        <HiMagnifyingGlass className="pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2 text-muted-foreground" />
+    <div ref={containerRef} className={cn("relative  w-full max-w-xl", className)}>
+      <div className="relative border-2 border-[#0e9d4c] rounded-4xl">
+        <HiMagnifyingGlass className="pointer-events-none  absolute left-4 top-1/2 size-5 -translate-y-1/2 text-muted-foreground" />
         <input
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => setIsFocused(true)}
-          placeholder="Search 50 tools — merge PDF, compress image, convert video…"
+          placeholder="Search 70 tools — merge PDF, compress image, convert video…"
           className="h-14 w-full rounded-full border border-border bg-card pl-12 pr-4 text-base text-foreground shadow-card outline-none transition-shadow placeholder:text-muted-foreground focus:ring-2 focus:ring-ring/40"
         />
       </div>
