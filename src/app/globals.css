@@ -5,13 +5,21 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ==========================================================================
-   Tools Root Design System
-   A strict 3-color system: white (primary surface/base), black (ink/text/
-   secondary actions), and #3CB371 (emerald — the ONLY accent color, used
-   for primary buttons, active states, focus rings, and small emphasis
-   details). No other hue appears anywhere in the product, including
-   destructive/error states, which use ink-on-white with an icon rather
-   than red, per this product's explicit palette constraint.
+   Tools Root Design System — v2 (emerald-forward redesign)
+   Superseded the earlier strict 3-color rule. Brand color is Tailwind
+   emerald-600 (#059669), used two ways depending on context:
+     --accent        #059669  — fills, buttons, icons, borders, large text.
+                                 3.8:1 on white — meets WCAG AA for UI
+                                 components and large text (3:1), NOT for
+                                 small body text.
+     --accent-ink    #047857  — emerald-700, used wherever the token sits
+                                 as small text/links on a light surface
+                                 (5.5:1 on white, passes AA for body text).
+   Full-bleed emerald sections (hero, CTA banes) use white text directly,
+   not a token — white-on-#059669 is also 3.8:1, fine for headings/large
+   text but section body copy at that size should stay large/medium
+   weight rather than small paragraph text.
+   Destructive states remain achromatic (ink-based) — no red introduced.
    ========================================================================== */
 
 :root {
@@ -38,24 +46,27 @@
   --muted: #f5f5f5;
   --muted-foreground: #737373;
 
-  /* ---- The single accent: emerald #3CB371 ---- */
-  --accent: #3cb371;
+  /* ---- Brand accent: Tailwind emerald-600 #059669 ---- */
+  --accent: #059669;
   --accent-foreground: #ffffff;
-  --accent-hover: #2f9e60;
-  --accent-active: #268552;
-  --accent-tint: #ecf8f1;
-  --accent-tint-strong: #d3f0e0;
+  --accent-hover: #047857;
+  --accent-active: #065f46;
+  --accent-tint: #ecfdf5;
+  --accent-tint-strong: #d1fae5;
+  /* Small text / links on light surfaces — emerald-700, AA-passing at
+     body-text sizes. Use --accent for anything large/UI/icon-sized. */
+  --accent-ink: #047857;
 
-  /* Destructive stays achromatic (ink-based) per the strict 3-color rule;
-     severity is carried by icon + copy, not a fourth hue. */
+  /* Destructive stays achromatic (ink-based); severity is carried by
+     icon + copy, not a fourth hue. */
   --destructive: #0a0a0a;
   --destructive-foreground: #ffffff;
 
   --border: #e5e5e5;
   --input: #e5e5e5;
-  --ring: #3cb371;
+  --ring: #059669;
 
-  --success: #3cb371;
+  --success: #059669;
   --success-foreground: #ffffff;
 
   /* ---- Typography ---- */
@@ -68,7 +79,7 @@
   --shadow-card: 0 0 0 1px rgba(10, 10, 10, 0.05), 0 1px 3px rgba(10, 10, 10, 0.08), 0 1px 2px -1px rgba(10, 10, 10, 0.08);
   --shadow-dropdown: 0 4px 6px -1px rgba(10, 10, 10, 0.08), 0 2px 4px -2px rgba(10, 10, 10, 0.06);
   --shadow-toast: 0 10px 15px -3px rgba(10, 10, 10, 0.1), 0 4px 6px -4px rgba(10, 10, 10, 0.08);
-  --shadow-accent-glow: 0 4px 14px -2px rgba(60, 179, 113, 0.35);
+  --shadow-accent-glow: 0 4px 14px -2px rgba(5, 150, 105, 0.35);
 
   /* ---- Motion (Section 4.3 of PRD: 150ms micro / 250ms standard / 400ms page) ---- */
   --ease-standard: cubic-bezier(0.32, 0.72, 0, 1);
@@ -96,28 +107,29 @@
   --muted: #1a1a1a;
   --muted-foreground: #a3a3a3;
 
-  --accent: #4ade95;
-  --accent-foreground: #08130e;
-  --accent-hover: #3cb371;
-  --accent-active: #2f9e60;
-  --accent-tint: #10241a;
-  --accent-tint-strong: #14301f;
+  --accent: #34d399;
+  --accent-foreground: #062017;
+  --accent-hover: #10b981;
+  --accent-active: #059669;
+  --accent-tint: #0d2b1f;
+  --accent-tint-strong: #123727;
+  --accent-ink: #6ee7b7;
 
   --destructive: #fafafa;
   --destructive-foreground: #0a0a0a;
 
   --border: #262626;
   --input: #262626;
-  --ring: #4ade95;
+  --ring: #34d399;
 
-  --success: #4ade95;
-  --success-foreground: #08130e;
+  --success: #34d399;
+  --success-foreground: #062017;
 
   --shadow-subtle: 0 0 0 1px rgba(255, 255, 255, 0.05);
   --shadow-card: 0 0 0 1px rgba(255, 255, 255, 0.06), 0 1px 3px rgba(0, 0, 0, 0.4);
   --shadow-dropdown: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
   --shadow-toast: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
-  --shadow-accent-glow: 0 4px 20px -2px rgba(74, 222, 149, 0.4);
+  --shadow-accent-glow: 0 4px 20px -2px rgba(52, 211, 153, 0.4);
 }
 
 @theme inline {
@@ -139,6 +151,7 @@
   --color-accent-active: var(--accent-active);
   --color-accent-tint: var(--accent-tint);
   --color-accent-tint-strong: var(--accent-tint-strong);
+  --color-accent-ink: var(--accent-ink);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-success: var(--success);

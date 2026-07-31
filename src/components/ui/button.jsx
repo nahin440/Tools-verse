@@ -19,6 +19,11 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/70",
         outline:
           "border border-border bg-transparent text-foreground hover:bg-secondary",
+        // For buttons placed directly on a solid --accent background (hero,
+        // CTA bands) — an "accent" variant button would be invisible there,
+        // since it'd be the same color as the section behind it.
+        "on-accent":
+          "bg-white text-accent-ink shadow-[0_1px_2px_rgba(10,10,10,0.06)] hover:bg-white/90",
         ghost: "bg-transparent text-foreground hover:bg-secondary",
         link: "text-accent underline-offset-4 hover:underline rounded-none px-0",
         destructive:

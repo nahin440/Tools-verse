@@ -3,7 +3,10 @@ import { HiOutlineCheckCircle } from "react-icons/hi2";
 
 import { getCategoryBySlug, getToolsByCategory, CATEGORIES } from "@/lib/registry/tools";
 import { getCategoryContent } from "@/lib/registry/category-content";
+import { getBlogPostsByCategory } from "@/lib/registry/blog-content";
 import { ToolCard } from "@/components/home/tool-card";
+import { CategoryHero } from "@/components/category-page/category-hero";
+import { BlogPostCard } from "@/components/shared/blog-post-card";
 
 const SITE_URL = "https://toolsroot.com";
 
@@ -37,6 +40,7 @@ export default async function CategoryPage({ params }) {
 
   const tools = getToolsByCategory(category.key);
   const content = getCategoryContent(category.key);
+  const relatedPosts = getBlogPostsByCategory(category.key, 3);
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
@@ -69,16 +73,11 @@ export default async function CategoryPage({ params }) {
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       )}
 
-      <div className="max-w-2xl">
-        <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
-          <HiOutlineCheckCircle className="size-3.5 text-accent" />
-          {tools.length} free tools
-        </span>
-        <h1 className="font-display mt-4 text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-          {category.label}
-        </h1>
-        <p className="mt-3 text-lg text-muted-foreground">{category.description}</p>
-      </div>
+      <CategoryHero
+        category={category}
+        toolCount={tools.length}
+        representativeSlug={tools[0]?.slug}
+      />
 
       <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {tools.map((tool) => (
@@ -108,6 +107,19 @@ export default async function CategoryPage({ params }) {
               </li>
             ))}
           </ul>
+        </div>
+      )}
+
+      {relatedPosts.length > 0 && (
+        <div className="mt-12">
+          <h2 className="font-display text-2xl font-semibold tracking-tight text-foreground">
+            Related articles
+          </h2>
+          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {relatedPosts.map((post) => (
+              <BlogPostCard key={post.slug} post={post} headingLevel="h3" />
+            ))}
+          </div>
         </div>
       )}
 

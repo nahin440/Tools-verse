@@ -1,9 +1,12 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { createElement } from "react";
 import { HiArrowRight, HiOutlineCalendar, HiOutlineClock } from "react-icons/hi2";
 
 import { BLOG_POSTS, getBlogPost, getAllBlogSlugs, getRelatedBlogPosts } from "@/lib/registry/blog-content";
-import { CATEGORIES, getTool } from "@/lib/registry/tools";
+import { CATEGORIES, getTool, getToolsByCategory } from "@/lib/registry/tools";
+import { getToolIcon } from "@/lib/registry/tool-icons";
+import { HeroIconFloat } from "@/components/shared/hero-icon-float";
 
 const SITE_URL = "https://toolsroot.com";
 
@@ -91,25 +94,32 @@ export default async function BlogPostPage({ params }) {
       </nav>
 
       <article className="mt-6 max-w-3xl">
-        <span className="inline-flex w-fit items-center rounded-full bg-accent-tint px-2.5 py-1 text-xs font-medium text-accent">
-          {category.shortLabel}
-        </span>
-        <h1 className="font-display mt-4 text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-          {post.title}
-        </h1>
-        <div className="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
-          <span className="inline-flex items-center gap-1.5">
-            <HiOutlineCalendar className="size-4" />
-            {formatDate(post.publishedAt)}
-          </span>
-          <span className="inline-flex items-center gap-1.5">
-            <HiOutlineClock className="size-4" />
-            {post.readingTime}
-          </span>
-        </div>
+        <section className="relative isolate mb-6 -mx-4 overflow-hidden rounded-3xl bg-accent sm:-mx-6">
+          <HeroIconFloat className="absolute top-1/2 right-[8%] flex size-24 -translate-y-1/2 items-center justify-center rounded-2xl bg-white/10 text-white ring-1 ring-white/20 backdrop-blur-sm sm:size-28">
+            {createElement(getToolIcon(getToolsByCategory(post.category)[0]?.slug), { className: "size-1/2" })}
+          </HeroIconFloat>
+          <div className="relative px-6 py-8 sm:px-10 sm:py-10 lg:max-w-[72%]">
+            <span className="inline-flex w-fit items-center rounded-full bg-white/15 px-2.5 py-1 text-xs font-medium text-white">
+              {category.shortLabel}
+            </span>
+            <h1 className="font-display mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+              {post.title}
+            </h1>
+            <div className="mt-3 flex items-center gap-4 text-sm text-white/80">
+              <span className="inline-flex items-center gap-1.5">
+                <HiOutlineCalendar className="size-4" />
+                {formatDate(post.publishedAt)}
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <HiOutlineClock className="size-4" />
+                {post.readingTime}
+              </span>
+            </div>
+          </div>
+        </section>
 
         <div
-          className="mt-8 max-w-none space-y-4 text-base leading-relaxed text-foreground [&_a]:font-medium [&_a]:text-accent [&_a]:hover:underline [&_h2]:font-display [&_h2]:mt-10 [&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:tracking-tight [&_h2]:text-foreground [&_h2]:first:mt-0 [&_p]:text-muted-foreground"
+          className="mt-8 max-w-none space-y-4 text-base leading-relaxed text-foreground [&_a]:font-medium [&_a]:text-accent-ink [&_a]:hover:underline [&_h2]:font-display [&_h2]:mt-10 [&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:tracking-tight [&_h2]:text-foreground [&_h2]:first:mt-0 [&_p]:text-muted-foreground"
           dangerouslySetInnerHTML={{ __html: post.content }}
         />
       </article>

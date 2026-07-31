@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import { ToolPageShell } from "./tool-page-shell";
 import { getAdapterLoader } from "@/features/adapter-registry";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function ToolPageClient({ toolSlug, toolName }) {
   const [adapter, setAdapter] = useState(null);
@@ -37,7 +38,7 @@ export function ToolPageClient({ toolSlug, toolName }) {
   if (!adapter) {
     return (
       <div className="flex min-h-[280px] items-center justify-center rounded-2xl border-2 border-dashed border-border bg-secondary/40">
-        <div className="size-10 animate-pulse rounded-full skeleton-shimmer" />
+        <Skeleton className="size-10 rounded-full" />
       </div>
     );
   }

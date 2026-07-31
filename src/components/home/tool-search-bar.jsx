@@ -28,7 +28,7 @@ export function ToolSearchBar({ className }) {
 
   return (
     <div ref={containerRef} className={cn("relative  w-full max-w-xl", className)}>
-      <div className="relative border-2 border-[#0e9d4c] rounded-4xl">
+      <div className="relative rounded-4xl border-2 border-accent">
         <HiMagnifyingGlass className="pointer-events-none  absolute left-4 top-1/2 size-5 -translate-y-1/2 text-muted-foreground" />
         <input
           type="text"
