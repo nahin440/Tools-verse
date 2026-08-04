@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { createElement } from "react";
 import { HiArrowRight, HiOutlineCalendar, HiOutlineClock } from "react-icons/hi2";
@@ -94,12 +95,23 @@ export default async function BlogPostPage({ params }) {
       </nav>
 
       <article className="mt-6 max-w-3xl">
-        <section className="relative isolate mb-6 -mx-4 overflow-hidden rounded-3xl bg-accent sm:-mx-6">
-          <HeroIconFloat className="absolute top-1/2 right-[8%] flex size-24 -translate-y-1/2 items-center justify-center rounded-2xl bg-white/10 text-white ring-1 ring-white/20 backdrop-blur-sm sm:size-28">
+        <section className="relative isolate mb-6 -mx-4 overflow-hidden rounded-3xl metallic-emerald-soft metallic-breathe sm:-mx-6">
+          {post.image?.hero && (
+            <Image
+              src={post.image.hero}
+              alt=""
+              aria-hidden="true"
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover opacity-30 mix-blend-overlay"
+            />
+          )}
+          <HeroIconFloat className="glass-panel absolute top-1/2 right-[8%] flex size-24 -translate-y-1/2 items-center justify-center rounded-2xl text-white sm:size-28">
             {createElement(getToolIcon(getToolsByCategory(post.category)[0]?.slug), { className: "size-1/2" })}
           </HeroIconFloat>
           <div className="relative px-6 py-8 sm:px-10 sm:py-10 lg:max-w-[72%]">
-            <span className="inline-flex w-fit items-center rounded-full bg-white/15 px-2.5 py-1 text-xs font-medium text-white">
+            <span className="glass-panel inline-flex w-fit items-center rounded-full px-2.5 py-1 text-xs font-medium text-white">
               {category.shortLabel}
             </span>
             <h1 className="font-display mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
@@ -119,7 +131,7 @@ export default async function BlogPostPage({ params }) {
         </section>
 
         <div
-          className="mt-8 max-w-none space-y-4 text-base leading-relaxed text-foreground [&_a]:font-medium [&_a]:text-accent-ink [&_a]:hover:underline [&_h2]:font-display [&_h2]:mt-10 [&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:tracking-tight [&_h2]:text-foreground [&_h2]:first:mt-0 [&_p]:text-muted-foreground"
+          className="mt-8 max-w-none space-y-4 text-base leading-relaxed text-foreground [&_a]:font-medium [&_a]:text-accent-ink [&_a]:hover:underline [&_h2]:font-display [&_h2]:mt-10 [&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:tracking-tight [&_h2]:text-foreground [&_h2]:first:mt-0 [&_p]:text-muted-foreground [&_figure]:my-8 [&_figure]:space-y-2 [&_img]:w-full [&_img]:rounded-2xl [&_img]:border [&_img]:border-border [&_img]:object-cover [&_img]:aspect-[16/9] [&_figcaption]:text-center [&_figcaption]:text-xs [&_figcaption]:text-muted-foreground"
           dangerouslySetInnerHTML={{ __html: post.content }}
         />
       </article>
@@ -137,7 +149,7 @@ export default async function BlogPostPage({ params }) {
                   className="group flex items-center justify-between rounded-xl border border-border px-4 py-3 text-sm font-medium text-foreground transition-colors hover:border-accent/30 hover:bg-accent-tint hover:text-accent-active"
                 >
                   {tool.name}
-                  <HiArrowRight className="size-4 opacity-0 transition-all group-hover:translate-x-0.5 group-hover:opacity-100" />
+                  <HiArrowRight className="size-4 opacity-0 transition-[transform,opacity] duration-150 ease-[var(--ease-standard)] group-hover:translate-x-0.5 group-hover:opacity-100" />
                 </Link>
               );
             })}
