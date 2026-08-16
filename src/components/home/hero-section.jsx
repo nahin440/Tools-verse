@@ -36,7 +36,21 @@ export function HeroSection() {
   const item = shouldReduceMotion ? staticVariants : itemVariants;
 
   return (
-    <section className="relative isolate z-20 metallic-emerald-loud metallic-breathe">
+    <section className="relative isolate z-20">
+      {/* Animated metallic background lives on its own layer, separate
+          from the text content below. metal-breathe animates `filter`,
+          and animating filter on an element that also parents the real
+          text/foreground content forces the browser to repaint that
+          whole subtree every frame — on many GPU/driver combos this
+          shows up as the entire section (gradient + text) flickering
+          in and out rather than a smooth breathing glow. Isolating the
+          gradient+filter animation to this empty absolutely-positioned
+          div means only this decorative layer repaints; the text above
+          it never does. */}
+      <div
+        className="pointer-events-none absolute inset-0 metallic-emerald-loud metallic-breathe"
+        aria-hidden="true"
+      />
       {/* Decorative background layer only — overflow-hidden lives here
           instead of on the section itself, so it clips the blobs/paths/
           floating icons but no longer clips the search dropdown below,
