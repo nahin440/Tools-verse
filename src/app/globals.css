@@ -438,6 +438,7 @@
      than "look, an animation." Reduced-motion turns this off entirely
      (see the prefers-reduced-motion block below). */
   --animate-metal-breathe: metal-breathe 10s ease-in-out infinite;
+  --animate-metal-breathe-glow: metal-breathe-glow 10s ease-in-out infinite;
   --animate-shine-sweep: shine-sweep 1.1s var(--ease-standard);
 
   @keyframes fade-up {
@@ -470,12 +471,32 @@
     to { height: 0; }
   }
   @keyframes metal-breathe {
-    0%, 100% { background-position: 0% 50%; filter: brightness(0.985) saturate(0.96); }
-    50% { background-position: 100% 50%; filter: brightness(1.045) saturate(1.08); }
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
   }
-  @keyframes shine-sweep {
-    from { background-position: 160% 0; }
-    to { background-position: -60% 0; }
+  /* Brightness/saturate "breathing" pulled off `filter` (see .metallic-breathe
+     below) and reimplemented as an opacity-only overlay pulse, so the whole
+     effect stays on composite-only properties (opacity, background-position)
+     with nothing that forces a repaint. */
+  @keyframes metal-breathe-glow {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 0.07; }
+  }
+  @keyframes float-icon {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(var(--float-y, -18px)) rotate(var(--float-rotate, 8deg)); }
+  }
+  @keyframes blob-drift {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    50% {
+      transform: translate(var(--drift-x, 18px), var(--drift-y, -12px))
+        rotate(var(--drift-rotate, 4deg));
+    }
+  }
+  @keyframes path-draw {
+    0% { stroke-dashoffset: var(--path-length, 1); opacity: 0.3; }
+    50% { stroke-dashoffset: 0; opacity: 0.6; }
+    100% { stroke-dashoffset: calc(var(--path-length, 1) * -1); opacity: 0.3; }
   }
 }
 
@@ -527,6 +548,64 @@
 }
 
 @layer utilities {
+  /* Hero above-the-fold entrance (headline, subhead, badge, search bar).
+     Deliberately a plain CSS animation rather than Motion's initial/
+     animate props: CSS animations start the instant styles are parsed,
+     with no dependency on React hydrating first, so content is
+     guaranteed to reach its fully-visible resting frame on its own
+     within `animation-duration` regardless of how long JS takes to
+     arrive and hydrate. That matters specifically because this is the
+     site's primary above-the-fold content, sitting alongside several
+     heavy "use client" decorative components (FloatingPaths,
+     OrganicBlobs, HeroFloatingIcons) on the same hero — see
+     hero-section.jsx's file-level comment for the full explanation of
+     why a hydration-gated entrance here was producing a visible
+     flicker/blank-hero flash on real network conditions (Vercel) despite
+     looking fine on localhost. `both` keeps the element at its `from`
+     state before the (staggered, per-element) delay elapses and holds
+     the `to` state after — no post-animation flash back to the
+     unanimated default. prefers-reduced-motion already zeroes animation
+     durations sitewide (see the media query above), so this is
+     reduced-motion-safe with no extra branching needed. */
+  .hero-fade-up {
+    animation: fade-up 0.5s var(--ease-standard, ease-out) both;
+  }
+
+  /* Ambient looping motion — floating icons, drifting blobs, drawing
+     paths — as plain CSS animations instead of Motion's `animate`
+     with `repeat: Infinity`. None of these three needed JS: they're
+     fixed-keyframe loops with no gesture/drag/physics involvement, so
+     driving them through React + the Web Animations API was pure
+     overhead — every frame went through Motion's own rAF scheduler
+     and, more importantly, every one of these components had to ship
+     as "use client" and hydrate before the loop could start at all.
+     A CSS animation starts the moment styles are parsed (same
+     reasoning as .hero-fade-up above) and composites purely on the
+     GPU via transform/opacity, with zero React or JS runtime
+     involvement once started. Each instance sets its own custom
+     properties (--float-y, --drift-x, etc.) inline so one shared
+     keyframe/class pair covers every icon/blob/path instead of
+     generating a bespoke @keyframes block per element. Durations and
+     per-element offsets come from `animation-duration` and
+     `animation-delay` set inline, same reasoning. All three inherit
+     reduced-motion support for free from the global
+     prefers-reduced-motion rule above (which zeroes every
+     animation-duration/iteration-count sitewide) — no per-component
+     shouldReduceMotion branch needed anymore. */
+  .float-icon {
+    animation: float-icon var(--float-duration, 6s) ease-in-out infinite;
+    animation-delay: var(--float-delay, 0s);
+  }
+  .blob-drift {
+    animation: blob-drift var(--drift-duration, 28s) ease-in-out infinite;
+    animation-delay: var(--drift-delay, 0s);
+  }
+  .path-draw {
+    stroke-dasharray: 1;
+    animation: path-draw var(--path-duration, 24s) linear infinite;
+    animation-delay: var(--path-delay, 0s);
+  }
+
   .skeleton-shimmer {
     background: linear-gradient(
       100deg,
@@ -568,7 +647,36 @@
      inside a printed/exported context) and so reduced-motion can turn
      off only the animation half, not the color. */
   .metallic-breathe {
+    /* `filter` used to animate here too (brightness/saturate), paired with
+       `will-change: filter, background-position` to push this layer onto
+       its own GPU compositor layer. That combination is the actual root
+       cause of the "hero flickers on Vercel, fine on localhost" bug:
+       animating `filter` on a `will-change`-promoted layer is a known
+       trigger for Chrome/GPU drivers to intermittently drop and
+       re-rasterize the whole layer — it flashes blank, then repaints —
+       rather than blend it smoothly. That's far more likely to surface
+       under real GPU/driver/compositor conditions (an actual deployed
+       site, a real visitor's machine) than on one warm, idle dev GPU
+       running `next start` locally, which is exactly the fine-locally,
+       broken-on-Vercel split this was reported with. Now this class only
+       animates `background-position`, which is cheap and composite-safe
+       on its own — no `will-change` needed, nothing here to repaint. The
+       brightness/saturate "breathing" moved to .metallic-breathe-glow, a
+       separate opacity-only overlay (see below), since opacity is also
+       composite-only and never triggers this failure mode. */
     animation: var(--animate-metal-breathe);
+  }
+  /* A plain, static, low-opacity white wash meant to sit directly on top
+     of .metallic-breathe, faded in and out via opacity to reproduce the
+     old filter-driven "brighter/more saturated at the midpoint" pulse —
+     without ever animating `filter`. Kept intentionally subtle (a flat
+     white overlay, not a copy of the metallic gradient) since opacity-
+     fading a plain color reads the same as the old brightness pulse at
+     this magnitude, for a fraction of the paint cost. */
+  .metallic-breathe-glow {
+    background-color: white;
+    opacity: 0;
+    animation: var(--animate-metal-breathe-glow);
   }
 
   .glass-panel {
@@ -577,6 +685,22 @@
     box-shadow: var(--glass-shadow);
     backdrop-filter: blur(16px) saturate(160%);
     -webkit-backdrop-filter: blur(16px) saturate(160%);
+  }
+  /* Same visual recipe as .glass-panel minus backdrop-filter — for
+     elements that are continuously transform-animated over an already-
+     repainting background (currently: hero-floating-icons.jsx's nine
+     floating chips over the hero's .metallic-breathe layer). A moving
+     backdrop-filter element can't cache its blurred/saturated sample —
+     it has to re-read the pixels beneath it every frame, at its new
+     position, and that cost compounds badly when what's beneath it is
+     also repainting every frame. Dropping backdrop-filter for just this
+     case removes that live-resample cost entirely; the background-image
+     gradient + border + shadow still read as a frosted glass chip, just
+     without the live blur-through of whatever's directly behind it. */
+  .glass-panel-static {
+    background-image: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
   }
   .glass-panel-on-light {
     background-image: var(--glass-bg-on-light);
@@ -612,6 +736,10 @@
   @media (prefers-reduced-motion: reduce) {
     .metallic-breathe {
       animation: none !important;
+    }
+    .metallic-breathe-glow {
+      animation: none !important;
+      opacity: 0 !important;
     }
     .shine-sweep[data-shine="active"]::after {
       animation: none !important;

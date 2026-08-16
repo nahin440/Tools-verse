@@ -1,8 +1,4 @@
-"use client";
-
 import { createElement } from "react";
-import { motion } from "motion/react";
-import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import {
   HiOutlineDocumentText,
   HiOutlineArrowsRightLeft,
@@ -32,6 +28,17 @@ import {
  * right ~420px of a ~1232px content area, i.e. ~66%-100%. Below `lg` the
  * columns stack (text above, icon area below) so horizontal placement
  * only matters at `lg`+, which is what this band is scoped to.
+ *
+ * No longer a client component. The float loop is a plain CSS animation
+ * (.float-icon, globals.css) driven entirely by inline custom properties
+ * (--float-y, --float-rotate, --float-duration, --float-delay) — each
+ * icon needs its own amplitude/duration/delay, but that's just a CSS
+ * custom property per element, not a reason to reach for Motion. That
+ * drops this whole component (and its former "use client" boundary,
+ * useReducedMotion() call, and nine live motion.div instances) out of
+ * the client bundle and off the hydration path entirely; reduced-motion
+ * support comes for free from the sitewide prefers-reduced-motion rule
+ * in globals.css instead of a per-component branch.
  */
 const FLOATING_ICONS = [
   { icon: HiOutlineDocumentText, top: "6%", left: "74%", size: "size-14 sm:size-20", duration: 6, distance: 18, rotate: 8, delay: 0 },
@@ -46,39 +53,36 @@ const FLOATING_ICONS = [
 ];
 
 export function HeroFloatingIcons() {
-  const shouldReduceMotion = useReducedMotion();
-
   return (
     <div
       aria-hidden="true"
       className="pointer-events-none absolute inset-0 hidden overflow-hidden sm:block"
     >
       {FLOATING_ICONS.map((item, i) => (
-        <motion.div
+        <div
           key={i}
-          // glass-panel (globals.css) replaces the old flat bg-white/10 +
-          // backdrop-blur-sm with the full frosted-glass recipe: layered
-          // gradient fill, 1px inner-highlight border, inset shadow — the
-          // "glassy" surface the redesign asked for, reused everywhere a
-          // small chip floats over the metallic hero.
-          className={`glass-panel absolute flex ${item.size} items-center justify-center rounded-3xl text-white`}
-          style={{ top: item.top, left: item.left }}
-          // Reduced motion: hold each icon at a static resting pose
-          // (still visible, still part of the composition) instead of
-          // looping the float/rotate cycle forever.
-          animate={
-            shouldReduceMotion
-              ? { y: 0, rotate: 0 }
-              : { y: [0, -item.distance, 0], rotate: [0, item.rotate, 0] }
-          }
-          transition={
-            shouldReduceMotion
-              ? { duration: 0 }
-              : { duration: item.duration, delay: item.delay, repeat: Infinity, ease: "easeInOut" }
-          }
+          // Was `glass-panel` (backdrop-filter: blur+saturate). Nine of
+          // these render here, and — even before the Motion→CSS move —
+          // sitting on top of the hero's continuously-repainting
+          // metal-breathe background made backdrop-filter close to
+          // worst-case for compositor cost: nine elements resampling
+          // live pixels beneath them, every frame, for as long as the
+          // hero is on screen. `glass-panel-static` keeps the same
+          // look — translucent white fill, inner highlight border, soft
+          // shadow — via a plain background/border/box-shadow instead,
+          // so there's nothing left to resample.
+          className={`glass-panel-static float-icon absolute flex ${item.size} items-center justify-center rounded-3xl text-white`}
+          style={{
+            top: item.top,
+            left: item.left,
+            "--float-y": `-${item.distance}px`,
+            "--float-rotate": `${item.rotate}deg`,
+            "--float-duration": `${item.duration}s`,
+            "--float-delay": `${item.delay}s`,
+          }}
         >
           {createElement(item.icon, { className: "size-1/2" })}
-        </motion.div>
+        </div>
       ))}
     </div>
   );

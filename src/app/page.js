@@ -47,7 +47,7 @@ const TRUST_POINTS = [
 export const metadata = {
   title: "Tools Root: Free Online File Converter, PDF Editor & Image Compressor",
   description:
-    "Free online file converter and PDF editor with 70 tools: merge PDF, compress PDF, convert PDF to Word, convert JPG to PNG or WEBP, compress images, convert MP4 and MP3, and more. Private, no signup, no install, no watermark.",
+    "Free online file converter and PDF editor with 115+ tools: merge PDF, compress PDF, convert PDF to Word, convert JPG to PNG or WEBP, compress images, convert MP4 and MP3, and more. Private, no signup, no install, no watermark.",
   keywords: [
     "free online file converter",
     "pdf converter online free",
@@ -258,7 +258,24 @@ export default function HomePage() {
           — only the section's own background changed here, so the
           illustration still reads as fine linework texture over the metal
           rather than competing with it. */}
-      <section className="relative isolate overflow-hidden metallic-emerald-soft metallic-breathe">
+      <section className="relative isolate overflow-hidden">
+        {/* Animated background isolated to its own layer — see
+            hero-section.jsx for why metal-breathe (background-position
+            only, no `filter`) must never sit on the same element as the
+            text content, or the whole section flickers as the browser
+            repaints the entire subtree every animation frame. */}
+        <div
+          className="pointer-events-none absolute inset-0 metallic-emerald-soft metallic-breathe"
+          aria-hidden="true"
+        />
+        {/* Opacity-only brightness pulse, layered on top of the div above
+            instead of inside it — see .metallic-breathe-glow in
+            globals.css for why this replaced a `filter` animation on the
+            layer itself. */}
+        <div
+          className="pointer-events-none absolute inset-0 metallic-breathe-glow"
+          aria-hidden="true"
+        />
         <FileConversionPattern className="pointer-events-none absolute inset-0 size-full" tone="on-accent" />
         <div className="relative mx-auto max-w-[720px] px-4 py-20 text-center sm:px-6">
           <h2 className="font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">
@@ -349,7 +366,7 @@ export default function HomePage() {
             </p>
             <p>
               What sets this file converter apart from most free online conversion websites is
-              where the actual conversion happens. Every one of the 70 tools listed on this site,
+              where the actual conversion happens. Every one of the 115+ tools listed on this site,
               PDF tools, image tools, an image format converter, document converters, audio tools,
               an audio format converter, video tools, a video format converter, and archive tools,
               runs entirely inside your own browser tab using JavaScript and WebAssembly. Your PDF,
@@ -600,7 +617,24 @@ export default function HomePage() {
           lighter density than the hero (see section-flow-lines.jsx for
           why: giving every section the hero's full density would be ~432
           animated paths across the page, verified excessive). */}
-      <section className="relative isolate overflow-hidden metallic-emerald-soft metallic-breathe">
+      <section className="relative isolate overflow-hidden">
+        {/* Animated background isolated to its own layer — see
+            hero-section.jsx for why metal-breathe (background-position
+            only, no `filter`) must never sit on the same element as the
+            text content, or the whole section flickers as the browser
+            repaints the entire subtree every animation frame. */}
+        <div
+          className="pointer-events-none absolute inset-0 metallic-emerald-soft metallic-breathe"
+          aria-hidden="true"
+        />
+        {/* Opacity-only brightness pulse, layered on top of the div above
+            instead of inside it — see .metallic-breathe-glow in
+            globals.css for why this replaced a `filter` animation on the
+            layer itself. */}
+        <div
+          className="pointer-events-none absolute inset-0 metallic-breathe-glow"
+          aria-hidden="true"
+        />
         <SectionFlowLines tone="on-accent" />
         <div className="relative mx-auto max-w-[1280px] px-4 py-16 text-center sm:px-6">
           <h2 className="text-3xl font-semibold tracking-tight text-white">Ready to get started?</h2>

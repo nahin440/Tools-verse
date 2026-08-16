@@ -54,7 +54,23 @@ export function ToolHero({ tool }) {
   const ToolIcon = getToolIcon(tool.slug);
 
   return (
-    <section className="relative isolate overflow-hidden rounded-3xl metallic-emerald-loud metallic-breathe">
+    <section className="relative isolate overflow-hidden rounded-3xl">
+      {/* Animated background isolated to its own layer. metal-breathe only
+          animates `background-position` (see globals.css) — cheap and
+          composite-safe — but keeping it on its own empty absolutely-
+          positioned div, separate from the real text content, still
+          means only this decorative layer ever repaints. */}
+      <div
+        className="pointer-events-none absolute inset-0 rounded-3xl metallic-emerald-loud metallic-breathe"
+        aria-hidden="true"
+      />
+      {/* Opacity-only brightness pulse, layered on top of the div above
+          instead of inside it — see .metallic-breathe-glow in globals.css
+          for why this replaced a `filter` animation on the layer itself. */}
+      <div
+        className="pointer-events-none absolute inset-0 rounded-3xl metallic-breathe-glow"
+        aria-hidden="true"
+      />
       <OrganicBlobs tone="on-accent" />
       <div className="pointer-events-none absolute inset-0" aria-hidden="true">
         <FloatingPaths position={1} colorRgb="255, 255, 255" />

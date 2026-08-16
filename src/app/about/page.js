@@ -36,7 +36,23 @@ const PRINCIPLES = [
 export default function AboutPage() {
   return (
     <div className="mx-auto max-w-[760px] px-4 py-16 sm:px-6">
-      <section className="relative isolate mb-4 -mx-4 overflow-hidden rounded-3xl metallic-emerald-loud metallic-breathe sm:-mx-6 lg:-mx-[190px]">
+      <section className="relative isolate mb-4 -mx-4 overflow-hidden rounded-3xl sm:-mx-6 lg:-mx-[190px]">
+        {/* Animated background isolated to its own layer — see
+            hero-section.jsx for why metal-breathe (background-position
+            only, no `filter`) must never sit on the same element as the
+            text content, or the whole section flickers as the browser
+            repaints the entire subtree every animation frame. */}
+        <div
+          className="pointer-events-none absolute inset-0 rounded-3xl metallic-emerald-loud metallic-breathe"
+          aria-hidden="true"
+        />
+        {/* Opacity-only brightness pulse, layered on top of the div above
+            instead of inside it — see .metallic-breathe-glow in globals.css
+            for why this replaced a `filter` animation on the layer itself. */}
+        <div
+          className="pointer-events-none absolute inset-0 rounded-3xl metallic-breathe-glow"
+          aria-hidden="true"
+        />
         <OrganicBlobs tone="on-accent" />
         <div className="pointer-events-none absolute inset-0" aria-hidden="true">
           <FloatingPaths position={1} colorRgb="255, 255, 255" />
@@ -148,7 +164,7 @@ export default function AboutPage() {
         <div className="relative">
           <h2 className="font-display text-lg font-semibold text-white">See it for yourself</h2>
           <p className="mt-1 text-sm text-white/80">
-            Browse all 70 tools, or read practical guides on formats and compression in the{" "}
+            Browse all 115+ tools, or read practical guides on formats and compression in the{" "}
             <Link href="/blog" className="font-medium text-white underline underline-offset-2 hover:text-white/90">
               blog
             </Link>
