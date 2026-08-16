@@ -508,7 +508,7 @@ export const PROBLEM_POSTS = [
     description:
       "What to do when you've lost the password to your own PDF — the legitimate recovery paths, and why brute-force password cracking isn't one of them here.",
     category: "pdf",
-    publishedAt: "2026-08-17",
+    publishedAt: "2026-08-09",
     readingTime: "3 min read",
     relatedTools: ["unlock-pdf", "password-protect-pdf"],
     image: {
@@ -541,7 +541,7 @@ export const PROBLEM_POSTS = [
     description:
       "Why the same photo can look noticeably different across devices or after conversion, and what color profiles actually have to do with it.",
     category: "image",
-    publishedAt: "2026-08-17",
+    publishedAt: "2026-08-09",
     readingTime: "4 min read",
     relatedTools: ["convert-image", "image-metadata"],
     image: {
@@ -574,7 +574,7 @@ export const PROBLEM_POSTS = [
     description:
       "Why large files crawl during upload, and the practical steps to speed things up without accepting a lower-quality result than necessary.",
     category: "document",
-    publishedAt: "2026-08-17",
+    publishedAt: "2026-08-09",
     readingTime: "3 min read",
     relatedTools: ["compress-video", "compress-image", "compress-pdf"],
     image: {
@@ -607,7 +607,7 @@ export const PROBLEM_POSTS = [
     description:
       "Why Ctrl+F doesn't find anything in a scanned document, and the one step that turns a picture of text into a genuinely searchable file.",
     category: "pdf",
-    publishedAt: "2026-08-24",
+    publishedAt: "2026-08-09",
     readingTime: "3 min read",
     relatedTools: ["ocr-pdf", "pdf-to-word"],
     image: {
@@ -640,7 +640,7 @@ export const PROBLEM_POSTS = [
     description:
       "The actual technical reasons files get corrupted — interrupted writes, storage failures, and transfer issues — and the habits that prevent most of it.",
     category: "document",
-    publishedAt: "2026-08-24",
+    publishedAt: "2026-08-09",
     readingTime: "4 min read",
     relatedTools: ["repair-pdf", "create-archive"],
     image: {

@@ -11,7 +11,7 @@ export const BEGINNER_POSTS = [
     description:
       "What actually makes a PDF different from a Word document or an image — and why it became the standard format for anything meant to look the same everywhere.",
     category: "pdf",
-    publishedAt: "2026-10-19",
+    publishedAt: "2026-08-13",
     readingTime: "3 min read",
     relatedTools: ["word-to-pdf", "merge-pdf", "compress-pdf"],
     image: {
@@ -44,7 +44,7 @@ export const BEGINNER_POSTS = [
     description:
       "The basic idea behind optical character recognition — how a scanned image of text becomes real, searchable, editable text.",
     category: "pdf",
-    publishedAt: "2026-10-19",
+    publishedAt: "2026-08-13",
     readingTime: "3 min read",
     relatedTools: ["ocr-pdf", "pdf-to-word"],
     image: {
@@ -77,7 +77,7 @@ export const BEGINNER_POSTS = [
     description:
       "Why SVG images stay perfectly sharp at any size — the basic idea behind vector graphics, and when SVG is the right format to use.",
     category: "image",
-    publishedAt: "2026-10-26",
+    publishedAt: "2026-08-13",
     readingTime: "3 min read",
     relatedTools: ["svg-to-png", "convert-image"],
     image: {
@@ -110,7 +110,7 @@ export const BEGINNER_POSTS = [
     description:
       "Why WEBP has become a common default on the web — what it does differently from JPG and PNG, and when it's worth using.",
     category: "image",
-    publishedAt: "2026-10-26",
+    publishedAt: "2026-08-14",
     readingTime: "3 min read",
     relatedTools: ["convert-image", "compress-image"],
     image: {
@@ -143,7 +143,7 @@ export const BEGINNER_POSTS = [
     description:
       "AVIF's compression advantage over even WEBP, and the compatibility tradeoffs that come with being a newer, less universally supported format.",
     category: "image",
-    publishedAt: "2026-11-02",
+    publishedAt: "2026-08-14",
     readingTime: "3 min read",
     relatedTools: ["avif-to-jpg", "avif-to-png", "convert-image"],
     image: {
@@ -176,7 +176,7 @@ export const BEGINNER_POSTS = [
     description:
       "How ZIP compression actually works, why it bundles multiple files into one, and what it can (and can't) shrink effectively.",
     category: "archive",
-    publishedAt: "2026-11-02",
+    publishedAt: "2026-08-14",
     readingTime: "3 min read",
     relatedTools: ["create-archive", "extract-archive"],
     image: {
@@ -209,7 +209,7 @@ export const BEGINNER_POSTS = [
     description:
       "The basics of the RAR archive format — how it compares to ZIP, why it's still common, and what you need to open one.",
     category: "archive",
-    publishedAt: "2026-11-09",
+    publishedAt: "2026-08-14",
     readingTime: "3 min read",
     relatedTools: ["extract-archive", "convert-archive"],
     image: {
@@ -242,7 +242,7 @@ export const BEGINNER_POSTS = [
     description:
       "How MP3 became the default digital audio format, what its compression actually trades away, and why it's still relevant today.",
     category: "audio",
-    publishedAt: "2026-11-09",
+    publishedAt: "2026-08-15",
     readingTime: "3 min read",
     relatedTools: ["convert-audio", "mp3-to-wav"],
     image: {
@@ -275,7 +275,7 @@ export const BEGINNER_POSTS = [
     description:
       "The idea behind lossless audio compression — how FLAC shrinks files without discarding any sound data, and who actually benefits from it.",
     category: "audio",
-    publishedAt: "2026-11-16",
+    publishedAt: "2026-08-15",
     readingTime: "3 min read",
     relatedTools: ["convert-audio", "flac-to-mp3"],
     image: {
@@ -308,7 +308,7 @@ export const BEGINNER_POSTS = [
     description:
       "The difference between a file format and a codec — a distinction that explains most confusing 'why won't this file play' situations.",
     category: "video",
-    publishedAt: "2026-11-16",
+    publishedAt: "2026-08-15",
     readingTime: "4 min read",
     relatedTools: ["convert-video", "convert-audio"],
     image: {
@@ -341,7 +341,7 @@ export const BEGINNER_POSTS = [
     description:
       "The basic mechanics behind shrinking an image's file size — and why some images compress much better than others.",
     category: "image",
-    publishedAt: "2026-11-23",
+    publishedAt: "2026-08-15",
     readingTime: "3 min read",
     relatedTools: ["compress-image", "convert-image"],
     image: {
@@ -374,7 +374,7 @@ export const BEGINNER_POSTS = [
     description:
       "How video compression shrinks files that would otherwise be enormous, and why bitrate is the setting that matters most.",
     category: "video",
-    publishedAt: "2026-11-23",
+    publishedAt: "2026-08-15",
     readingTime: "4 min read",
     relatedTools: ["compress-video", "convert-video"],
     image: {
@@ -407,7 +407,7 @@ export const BEGINNER_POSTS = [
     description:
       "How lossless compression manages to shrink a file while preserving every single bit of the original data — and where it's used.",
     category: "document",
-    publishedAt: "2026-11-30",
+    publishedAt: "2026-08-16",
     readingTime: "3 min read",
     relatedTools: ["create-archive", "compress-pdf"],
     image: {
@@ -440,7 +440,7 @@ export const BEGINNER_POSTS = [
     description:
       "How lossy compression achieves dramatically smaller files by discarding data — and why that tradeoff is usually worth it.",
     category: "image",
-    publishedAt: "2026-11-30",
+    publishedAt: "2026-08-16",
     readingTime: "3 min read",
     relatedTools: ["compress-image", "compress-video"],
     image: {
@@ -473,7 +473,7 @@ export const BEGINNER_POSTS = [
     description:
       "The fundamental difference between pixel-based and instruction-based images — and why it determines which format is right for a given image.",
     category: "image",
-    publishedAt: "2026-12-07",
+    publishedAt: "2026-08-16",
     readingTime: "4 min read",
     relatedTools: ["svg-to-png", "convert-image", "image-upscaler"],
     image: {
@@ -506,7 +506,7 @@ export const BEGINNER_POSTS = [
     description:
       "The extra information tucked inside photos, documents, and other files beyond their visible content — and why it's worth knowing what's there.",
     category: "image",
-    publishedAt: "2026-12-07",
+    publishedAt: "2026-08-16",
     readingTime: "4 min read",
     relatedTools: ["image-metadata", "convert-image"],
     image: {

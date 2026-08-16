@@ -9,7 +9,7 @@ export const PRODUCTIVITY_POSTS = [
     description:
       "Which format to actually submit, share, and archive coursework in — from essay assignments to scanned notes and group project files.",
     category: "document",
-    publishedAt: "2026-08-31",
+    publishedAt: "2026-08-10",
     readingTime: "4 min read",
     relatedTools: ["word-to-pdf", "jpg-to-pdf", "compress-pdf"],
     image: {
@@ -45,7 +45,7 @@ export const PRODUCTIVITY_POSTS = [
     description:
       "The format conventions that make a business look organized and professional — invoices, contracts, reports, and what to send versus what to keep editable.",
     category: "document",
-    publishedAt: "2026-08-31",
+    publishedAt: "2026-08-10",
     readingTime: "4 min read",
     relatedTools: ["excel-to-pdf", "word-to-pdf", "password-protect-pdf"],
     image: {
@@ -81,7 +81,7 @@ export const PRODUCTIVITY_POSTS = [
     description:
       "What print shops actually want — resolution, color mode, and format expectations that avoid a print job coming out wrong.",
     category: "image",
-    publishedAt: "2026-09-07",
+    publishedAt: "2026-08-10",
     readingTime: "4 min read",
     relatedTools: ["convert-image-to-pdf", "resize-image", "convert-image"],
     image: {
@@ -117,7 +117,7 @@ export const PRODUCTIVITY_POSTS = [
     description:
       "Choosing formats that keep a website fast and accessible — for images, downloadable resources, and embedded documents alike.",
     category: "image",
-    publishedAt: "2026-09-07",
+    publishedAt: "2026-08-10",
     readingTime: "4 min read",
     relatedTools: ["convert-image", "compress-image", "word-to-pdf"],
     image: {
@@ -153,7 +153,7 @@ export const PRODUCTIVITY_POSTS = [
     description:
       "A practical structure for personal and household documents — taxes, receipts, records — that stays usable years down the line, not just this month.",
     category: "document",
-    publishedAt: "2026-09-14",
+    publishedAt: "2026-08-11",
     readingTime: "4 min read",
     relatedTools: ["merge-pdf", "create-archive"],
     image: {
@@ -189,7 +189,7 @@ export const PRODUCTIVITY_POSTS = [
     description:
       "A simple, consistent file naming convention that scales from a single project to years of accumulated documents — no more final-v2-FINAL.",
     category: "document",
-    publishedAt: "2026-09-14",
+    publishedAt: "2026-08-11",
     readingTime: "3 min read",
     relatedTools: ["merge-pdf"],
     image: {
@@ -225,7 +225,7 @@ export const PRODUCTIVITY_POSTS = [
     description:
       "Practical habits for sharing files that shouldn't end up in the wrong hands — encryption, channel separation, and what to avoid.",
     category: "pdf",
-    publishedAt: "2026-09-21",
+    publishedAt: "2026-08-11",
     readingTime: "4 min read",
     relatedTools: ["password-protect-pdf", "password-protect-archive", "watermark-pdf"],
     image: {
@@ -261,7 +261,7 @@ export const PRODUCTIVITY_POSTS = [
     description:
       "Getting real value out of cloud storage — what belongs there, what doesn't, and the habits that prevent both clutter and accidental data loss.",
     category: "document",
-    publishedAt: "2026-09-21",
+    publishedAt: "2026-08-11",
     readingTime: "4 min read",
     relatedTools: ["compress-pdf", "create-archive"],
     image: {
@@ -297,7 +297,7 @@ export const PRODUCTIVITY_POSTS = [
     description:
       "Sending attachments that arrive cleanly, open easily, and don't bounce back — format, size, and naming habits that avoid common email friction.",
     category: "document",
-    publishedAt: "2026-09-28",
+    publishedAt: "2026-08-11",
     readingTime: "3 min read",
     relatedTools: ["compress-pdf", "create-archive", "word-to-pdf"],
     image: {
@@ -333,7 +333,7 @@ export const PRODUCTIVITY_POSTS = [
     description:
       "How to sign a PDF properly without printing and rescanning — the difference between a simple e-signature and a legally verified digital signature.",
     category: "pdf",
-    publishedAt: "2026-09-28",
+    publishedAt: "2026-08-12",
     readingTime: "4 min read",
     relatedTools: ["sign-pdf", "fill-pdf-forms", "password-protect-pdf"],
     image: {
@@ -369,7 +369,7 @@ export const PRODUCTIVITY_POSTS = [
     description:
       "A backup habit that actually gets followed — what to prioritize, how many copies is genuinely enough, and the mistakes that undermine a backup plan.",
     category: "document",
-    publishedAt: "2026-10-05",
+    publishedAt: "2026-08-12",
     readingTime: "4 min read",
     relatedTools: ["create-archive", "compress-pdf"],
     image: {
@@ -405,7 +405,7 @@ export const PRODUCTIVITY_POSTS = [
     description:
       "Moving away from paper without a chaotic transition — what to digitize first, and the habits that make a paperless system actually stick.",
     category: "document",
-    publishedAt: "2026-10-05",
+    publishedAt: "2026-08-12",
     readingTime: "4 min read",
     relatedTools: ["jpg-to-pdf", "ocr-pdf", "merge-pdf"],
     image: {
@@ -441,7 +441,7 @@ export const PRODUCTIVITY_POSTS = [
     description:
       "Keeping track of document revisions without a dedicated version control system — practical habits that avoid the 'which one is current' problem.",
     category: "document",
-    publishedAt: "2026-10-12",
+    publishedAt: "2026-08-12",
     readingTime: "4 min read",
     relatedTools: ["merge-pdf", "compare-pdf"],
     image: {
@@ -477,7 +477,7 @@ export const PRODUCTIVITY_POSTS = [
     description:
       "A realistic system for organizing a large, ever-growing photo collection — culling, tagging by event, and keeping file sizes reasonable.",
     category: "image",
-    publishedAt: "2026-10-12",
+    publishedAt: "2026-08-13",
     readingTime: "4 min read",
     relatedTools: ["compress-image", "resize-image", "create-archive"],
     image: {
@@ -513,7 +513,7 @@ export const PRODUCTIVITY_POSTS = [
     description:
       "Where duplicate files actually come from, and a cautious approach to cleaning them up that doesn't risk deleting something you needed.",
     category: "document",
-    publishedAt: "2026-10-19",
+    publishedAt: "2026-08-13",
     readingTime: "3 min read",
     relatedTools: ["create-archive", "list-archive-contents"],
     image: {
