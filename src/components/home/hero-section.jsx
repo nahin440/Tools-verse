@@ -6,14 +6,9 @@ import { HiOutlineCheckCircle } from "react-icons/hi2";
 import { ToolSearchBar } from "@/components/home/tool-search-bar";
 import { HeroFloatingIcons } from "@/components/home/hero-floating-icons";
 import { FloatingPaths } from "@/components/ui/background-paths";
+import { OrganicBlobs } from "@/components/illustrations/organic-blobs";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
 
-// One shared stagger container + child variant set, reused for badge →
-// heading → subtext → search. Motivated by hierarchy (Section 5 of the
-// design-taste skill: "what does this animation communicate?") — it
-// establishes reading order on first paint. Runs once on mount, never
-// re-triggers on scroll, so it never competes with the page for
-// attention after the first second.
 const containerVariants = {
   hidden: {},
   show: {
@@ -30,8 +25,6 @@ const itemVariants = {
   },
 };
 
-// Reduced-motion variant: same final state, no offset to animate from,
-// so content simply appears rather than sliding in.
 const staticVariants = {
   hidden: { opacity: 1, y: 0 },
   show: { opacity: 1, y: 0 },
@@ -43,10 +36,27 @@ export function HeroSection() {
   const item = shouldReduceMotion ? staticVariants : itemVariants;
 
   return (
-    <section className="relative isolate overflow-hidden metallic-emerald-soft metallic-breathe">
-      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-        <FloatingPaths position={1} colorRgb="255, 255, 255" />
-        <FloatingPaths position={-1} colorRgb="255, 255, 255" />
+    <section className="relative isolate z-20 metallic-emerald-loud metallic-breathe">
+      {/* Decorative background layer only — overflow-hidden lives here
+          instead of on the section itself, so it clips the blobs/paths/
+          floating icons but no longer clips the search dropdown below,
+          which needs to be able to render past the hero's own bottom
+          edge without getting cut off or visually detached from its
+          input (see ToolSearchBar). */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+        <OrganicBlobs tone="on-accent" />
+        <FloatingPaths
+          position={1}
+          colorRgb="255, 255, 255"
+          reverseX
+          metallic
+        />
+        <FloatingPaths
+          position={-1}
+          colorRgb="255, 255, 255"
+          reverseX
+          metallic
+        />
       </div>
       <HeroFloatingIcons />
       <motion.div
@@ -73,18 +83,17 @@ export function HeroSection() {
             variants={item}
             className="mx-auto mt-5 max-w-xl text-lg text-balance text-white/85 lg:mx-0"
           >
-            Merge, convert, compress, and edit PDFs, images, documents, audio, and video. Free,
-            private, and processed entirely in your browser.
+            Merge, convert, compress, and edit PDFs, images, documents, audio,
+            and video. Free, private, and processed entirely in your browser.
           </motion.p>
-          <motion.div variants={item} className="mt-8 flex justify-center lg:justify-start">
+          <motion.div
+            variants={item}
+            className="mt-8 flex justify-center lg:justify-start"
+          >
             <ToolSearchBar />
           </motion.div>
         </div>
 
-        {/* Spacer column on large screens — the floating icons render as
-            an absolutely-positioned overlay across the whole section, so
-            this reserves the visual right-hand space for them without
-            needing its own content. */}
         <div className="hidden lg:block" aria-hidden="true" />
       </motion.div>
     </section>

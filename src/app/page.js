@@ -1,14 +1,17 @@
 import Link from "next/link";
+import Image from "next/image";
+import { createElement } from "react";
 import { HiLockClosed, HiBolt, HiGlobeAlt, HiArrowRight } from "react-icons/hi2";
 
-import { ToolCard } from "@/components/home/tool-card";
+import { ToolCarousel } from "@/components/home/tool-carousel";
+import { CategoryBento } from "@/components/home/category-bento";
 import { HeroSection } from "@/components/home/hero-section";
 import { TrustPoints } from "@/components/home/trust-points";
 import { SectionFlowLines } from "@/components/ui/section-flow-lines";
 import { FileConversionPattern } from "@/components/illustrations/file-conversion-pattern";
 import { CATEGORIES, getToolsByCategory, TOOLS } from "@/lib/registry/tools";
 import { BLOG_POSTS } from "@/lib/registry/blog-content";
-import { BlogPostCard } from "@/components/shared/blog-post-card";
+import { FeaturedGuides } from "@/components/home/featured-guides";
 import { getToolIcon } from "@/lib/registry/tool-icons";
 import { Button } from "@/components/ui/button";
 
@@ -61,6 +64,24 @@ export const metadata = {
     "compress video online",
     "zip file converter",
     "online file converter no signup",
+    "split pdf online free",
+    "rotate pdf online",
+    "watermark pdf online",
+    "password protect pdf online",
+    "ocr pdf online free",
+    "sign pdf online free",
+    "excel to pdf converter",
+    "powerpoint to pdf converter",
+    "pdf to excel converter",
+    "remove background from image online",
+    "resize image online free",
+    "webp to jpg converter",
+    "convert avi to mp4",
+    "extract audio from video online",
+    "unlock pdf online",
+    "browser based file converter",
+    "no upload file converter",
+    "private online file converter",
   ],
   alternates: {
     canonical: "https://toolsroot.com/",
@@ -76,6 +97,27 @@ export const metadata = {
 export default function HomePage() {
   const popularTools = POPULAR_SLUGS.map((slug) => TOOLS.find((t) => t.slug === slug)).filter(Boolean);
   const latestGuides = [...BLOG_POSTS].sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)).slice(0, 3);
+  const categoryBentoItems = Object.entries(CATEGORIES)
+    .map(([key, category]) => {
+      const tools = getToolsByCategory(key);
+      const Icon = getToolIcon(tools[0]?.slug);
+      return {
+        category,
+        tools,
+        // Pre-rendered element, not the bare component reference — see
+        // this same pattern's rationale in trust-points.jsx; CategoryBento
+        // is a Client Component and React can't serialize a function
+        // reference across that boundary. size-full (not a fixed size)
+        // so the icon scales with whichever circle it's placed inside —
+        // CategoryBento uses a bigger circle for the hero cell than for
+        // the 8 regular cells, and a hardcoded size wouldn't adapt.
+        iconElement: createElement(Icon, { className: "size-full" }),
+      };
+    })
+    // Real tool count drives which category gets the hero cell, not
+    // object-key declaration order in CATEGORIES (which is incidental
+    // and would silently break this if that registry ever gets reordered).
+    .sort((a, b) => b.tools.length - a.tools.length);
 
   return (
     <div>
@@ -98,52 +140,112 @@ export default function HomePage() {
 
       {/* Popular tools. SectionFlowLines emerald tone (this section has no
           bg-accent, so it needs the light-background variant, opposite of
-          the hero/CTA's white lines). */}
+          the hero/CTA's white lines). Heading now Roboto Slab (font-display,
+          picks up the sitewide serif automatically) for the same
+          editorial-serif treatment as every other section heading. */}
       <section className="relative isolate z-10 overflow-hidden mx-auto max-w-[1280px] px-4 py-16 sm:px-6">
         <SectionFlowLines tone="on-light" />
-        <div className="relative flex items-center justify-between">
-          <h2 className="text-2xl font-semibold tracking-tight text-foreground">Most popular tools</h2>
+        <div className="relative flex items-end justify-between">
+          <div>
+            <span className="text-xs font-semibold tracking-[0.14em] text-accent uppercase">
+              Start here
+            </span>
+            <h2 className="font-display mt-1 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+              Most popular tools
+            </h2>
+          </div>
         </div>
-        <div className="relative mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {popularTools.map((tool) => (
-            <ToolCard key={tool.slug} tool={tool} />
-          ))}
+        <div className="relative mt-6">
+          <ToolCarousel tools={popularTools} />
+        </div>
+      </section>
+
+      {/* Photography band — breaks the grid/grid/grid rhythm (Popular
+          Tools above, Browse by Category below are both card grids;
+          repeating that shape a third time in a row is the exact
+          "every section looks the same" pattern the redesign brief
+          calls out). Two real photographs (Unsplash, verified via the
+          same allow-listed CDN path already used for blog images, see
+          next.config.mjs) presented as offset floating-artifact cards
+          — the Steep reference's "white card + soft wide shadow"
+          language (--shadow-float, globals.css) rather than a full-
+          bleed hero image, so it reads as a considered composition
+          fragment, not a stock-photo banner. Purely atmospheric: no
+          tool, category, or copy lives in this section, so nothing
+          here is content that needs preserving/updating. */}
+      <section className="relative isolate overflow-hidden mx-auto max-w-[1280px] px-4 py-4 sm:px-6">
+        <div className="relative grid grid-cols-1 items-center gap-10 sm:grid-cols-2 sm:gap-14">
+          <div className="relative h-[280px] sm:h-[340px]">
+            <div className="absolute top-0 left-0 h-[220px] w-[78%] overflow-hidden rounded-2xl bg-secondary shadow-float sm:h-[260px]">
+              <Image
+                src="https://images.unsplash.com/photo-1752223638233-4c9545333f89?w=900&q=80&auto=format&fit=crop"
+                alt="A tidy desk with a laptop, set up for focused work"
+                fill
+                sizes="(max-width: 640px) 78vw, 380px"
+                className="object-cover"
+                // This is the larger of the two photography-band images and
+                // sits inside the homepage's first viewport on most common
+                // screen sizes (right below the hero, which has no image of
+                // its own — just gradient/SVG/text) — making it the likely
+                // Largest Contentful Paint element. Without `priority`,
+                // next/image defaults every image to loading="lazy", which
+                // on some browsers means the request doesn't even start
+                // until layout confirms the image is near-viewport, adding
+                // avoidable delay to LCP for content that's actually visible
+                // on load. `priority` switches this one to eager-loaded and
+                // preloaded, which is exactly what next/image's own docs
+                // recommend for a page's LCP candidate.
+                priority
+              />
+            </div>
+            <div className="absolute right-0 bottom-0 h-[160px] w-[62%] overflow-hidden rounded-2xl bg-secondary shadow-float ring-4 ring-background sm:h-[190px]">
+              <Image
+                src="https://images.unsplash.com/photo-1679153369902-50687ca31379?w=700&q=80&auto=format&fit=crop"
+                alt="Warm afternoon light over a plant beside a workspace window"
+                fill
+                sizes="(max-width: 640px) 62vw, 300px"
+                className="object-cover"
+                // Smaller, secondary image in the same pair — left on the
+                // default lazy behavior deliberately, so the one real
+                // priority signal on this page points unambiguously at the
+                // actual LCP candidate above rather than being split
+                // between two images (next/image and Chrome's own LCP
+                // heuristics both work better with a single clear signal
+                // per page than several competing `priority` images).
+              />
+            </div>
+          </div>
+          <div>
+            <span className="text-xs font-semibold tracking-[0.14em] text-accent uppercase">
+              Built for real work
+            </span>
+            <h2 className="font-display mt-1 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+              Wherever the work happens, the tools are already there
+            </h2>
+            <p className="mt-3 max-w-md text-muted-foreground">
+              No install, no upload wait, no account. Open a tool, drop a file, and it&apos;s done
+              before you&apos;d have finished signing up somewhere else.
+            </p>
+          </div>
         </div>
       </section>
 
       {/* Category navigation. SectionFlowLines emerald tone — this
           section's bg-secondary/30 tint is much closer to white than to
           the accent color, so it gets the same "on-light" emerald lines
-          as the other plain-background sections. */}
+          as the other plain-background sections. Cards now glossy-card
+          (v4) with metallic icon chips, matching ToolCard's upgrade
+          above — the whole site's "clickable tool/category tile" now
+          reads as one consistent coated material. */}
       <section id="categories" className="relative isolate overflow-hidden border-y border-border bg-secondary/30">
         <SectionFlowLines tone="on-light" />
         <div className="relative mx-auto max-w-[1280px] px-4 py-16 sm:px-6">
-          <h2 className="text-2xl font-semibold tracking-tight text-foreground">Browse by category</h2>
-          <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {Object.entries(CATEGORIES).map(([key, cat]) => {
-              const tools = getToolsByCategory(key);
-              const FirstIcon = getToolIcon(tools[0]?.slug);
-              return (
-                <Link
-                  key={key}
-                  href={`/${cat.slug}`}
-                  className="group flex flex-col gap-4 rounded-2xl border border-border bg-card p-6 shadow-subtle transition-[transform,border-color,box-shadow] duration-150 ease-[var(--ease-standard)] hover:-translate-y-0.5 hover:border-accent/30 hover:shadow-card"
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex size-12 items-center justify-center rounded-xl bg-accent-tint text-accent transition-[background-color,color,box-shadow] duration-150 ease-[var(--ease-standard)] group-hover:bg-accent group-hover:text-accent-foreground group-hover:shadow-accent-glow">
-                      <FirstIcon className="size-6" />
-                    </div>
-                    <span className="rounded-full bg-secondary px-2.5 py-1 text-xs font-medium text-muted-foreground">
-                      {tools.length} tools
-                    </span>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-foreground">{cat.label}</h3>
-                    <p className="mt-1 text-sm text-muted-foreground">{cat.description}</p>
-                  </div>
-                </Link>
-              );
-            })}
+          <span className="text-xs font-semibold tracking-[0.14em] text-accent uppercase">Browse</span>
+          <h2 className="font-display mt-1 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+            Browse by category
+          </h2>
+          <div className="mt-6">
+            <CategoryBento items={categoryBentoItems} />
           </div>
         </div>
       </section>
@@ -183,10 +285,12 @@ export default function HomePage() {
         <TrustPoints points={TRUST_POINTS} />
       </section>
 
-      {/* Latest guides — same header/grid pattern as "Most popular tools"
-          above, surfacing blog content from the homepage so it isn't only
-          reachable via the footer link or direct search. Closes the
-          homepage-doesn't-link-to-blog gap. */}
+      {/* Latest guides — replaced the plain 3-up BlogPostCard grid with an
+          editorial "featured story + supporting stories" layout
+          (FeaturedGuides) so this section reads as considered rather than
+          a repeated card shape. BlogPostCard itself is untouched — it's
+          still what renders on /blog, category pages, and tool-page
+          "Related articles". */}
       <section className="relative isolate overflow-hidden border-y border-border bg-secondary/30 mx-auto max-w-none px-4 py-16 sm:px-6">
         <SectionFlowLines tone="on-light" />
         <div className="relative mx-auto flex max-w-[1280px] items-center justify-between">
@@ -199,10 +303,8 @@ export default function HomePage() {
             <HiArrowRight className="size-3.5" />
           </Link>
         </div>
-        <div className="relative mx-auto mt-6 grid max-w-[1280px] grid-cols-1 gap-4 sm:grid-cols-3">
-          {latestGuides.map((post) => (
-            <BlogPostCard key={post.slug} post={post} />
-          ))}
+        <div className="relative mx-auto mt-6 max-w-[1280px]">
+          <FeaturedGuides posts={latestGuides} />
         </div>
       </section>
 
@@ -427,6 +529,66 @@ export default function HomePage() {
                 blog
               </Link>{" "}
               cover two of the most common format and compression questions in more detail.
+            </p>
+            <h2 className="!mt-8 font-display text-2xl font-semibold tracking-tight text-foreground">
+              Handling large files without an upload limit slowing you down
+            </h2>
+            <p>
+              Because every conversion, compression, and edit happens inside your own browser tab
+              rather than on a remote server, this file converter is not bound by the strict
+              upload caps that many free online tools enforce to manage server load and bandwidth
+              costs. A large video file, a high-resolution photo batch, or a lengthy scanned PDF
+              can be processed the same way a small file is, since the only real constraint is
+              your own device&apos;s available memory rather than a fixed server-side ceiling. The{" "}
+              <Link href="/video-tools/compress-video" className="font-medium text-accent hover:underline">
+                video compressor
+              </Link>{" "}
+              and{" "}
+              <Link href="/video-converter" className="font-medium text-accent hover:underline">
+                video converter
+              </Link>{" "}
+              in particular are sized generously for this reason, since video files are typically
+              the largest everyday file type people need to convert or shrink down for sharing.
+            </p>
+            <h2 className="!mt-8 font-display text-2xl font-semibold tracking-tight text-foreground">
+              A free file converter that works on phones and tablets, not just desktop
+            </h2>
+            <p>
+              Every tool on this site is built to work the same way on a phone or tablet browser
+              as it does on a desktop computer, which matters most for the tools people actually
+              reach for on mobile: converting a{" "}
+              <Link href="/image-converter/heic-to-jpg" className="font-medium text-accent hover:underline">
+                HEIC photo from an iPhone
+              </Link>{" "}
+              to JPG before sending it to someone with an Android phone, signing a PDF form with a
+              finger on a touchscreen using the{" "}
+              <Link href="/pdf-tools/sign-pdf" className="font-medium text-accent hover:underline">
+                PDF signature tool
+              </Link>
+              , or quickly{" "}
+              <Link href="/image-tools/compress-image" className="font-medium text-accent hover:underline">
+                compressing a photo
+              </Link>{" "}
+              taken moments earlier so it fits an email attachment limit. Since nothing needs
+              installing from an app store and no account needs creating, there is no meaningful
+              difference between reaching for one of these tools on a laptop at a desk or on a
+              phone between other tasks, a genuine advantage over desktop-only software that
+              simply is not available away from that one installed computer.
+            </p>
+            <h2 className="!mt-8 font-display text-2xl font-semibold tracking-tight text-foreground">
+              How this free online converter compares to paid software and other conversion sites
+            </h2>
+            <p>
+              Desktop suites like Adobe Acrobat or dedicated video editing software offer deep,
+              professional-grade feature sets, but they cost money, require installation, and are
+              tied to one device. Many other free online converters offer similar convenience to
+              this site on the surface, but route your file through a server to perform the
+              conversion, meaning the file is uploaded before you ever see a result and is subject
+              to whatever retention or deletion policy that particular site happens to have. This
+              collection of tools aims to sit in a genuinely different spot: professional-enough
+              results for the overwhelming majority of everyday PDF, image, document, audio, and
+              video tasks, with none of the cost, installation, or upload-and-hope-it&apos;s-
+              deleted tradeoffs either alternative asks for.
             </p>
           </div>
         </div>
