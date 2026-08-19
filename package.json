@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "postinstall": "node scripts/sync-pdfjs-vendor.js"
+    "postinstall": "node scripts/sync-pdfjs-vendor.js && node scripts/patch-ffmpeg-worker.js"
   },
   "dependencies": {
     "@cantoo/pdf-lib": "^2.7.2",
