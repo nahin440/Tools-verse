@@ -1,4 +1,5 @@
 import { convertVideo } from "@/lib/engines/media/media-core";
+import { MEDIA_MAX_SIZE_BYTES } from "@/lib/engines/media/media-limits";
 import { makeLockedMediaFormatPanel } from "@/components/tool-shared/locked-media-format-panel";
 
 const OptionsPanel = makeLockedMediaFormatPanel(
@@ -9,7 +10,7 @@ const OptionsPanel = makeLockedMediaFormatPanel(
 export const gifToMp4Adapter = {
   accepts: ["image/gif", ".gif"],
   multiple: false,
-  maxSizeBytes: 1024 * 1024 * 1024,
+  maxSizeBytes: MEDIA_MAX_SIZE_BYTES,
   OptionsPanel,
   defaultOptions: { targetExt: "mp4" },
   runButtonLabel: "Convert now",

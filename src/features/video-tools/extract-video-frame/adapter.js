@@ -1,10 +1,11 @@
 import { extractVideoFrame } from "@/lib/engines/media/media-core";
+import { MEDIA_MAX_SIZE_BYTES } from "@/lib/engines/media/media-limits";
 import { ExtractVideoFrameOptionsPanel } from "./options-panel";
 
 export const extractVideoFrameAdapter = {
   accepts: ["video/*"],
   multiple: false,
-  maxSizeBytes: 1024 * 1024 * 1024,
+  maxSizeBytes: MEDIA_MAX_SIZE_BYTES,
   OptionsPanel: ExtractVideoFrameOptionsPanel,
   defaultOptions: { timestampSec: 0 },
   runButtonLabel: "Extract frame",

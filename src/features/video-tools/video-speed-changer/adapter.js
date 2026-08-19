@@ -1,10 +1,11 @@
 import { changeVideoSpeed } from "@/lib/engines/media/media-core";
+import { MEDIA_MAX_SIZE_BYTES } from "@/lib/engines/media/media-limits";
 import { VideoSpeedChangerOptionsPanel } from "./options-panel";
 
 export const videoSpeedChangerAdapter = {
   accepts: ["video/*"],
   multiple: false,
-  maxSizeBytes: 1024 * 1024 * 1024,
+  maxSizeBytes: MEDIA_MAX_SIZE_BYTES,
   OptionsPanel: VideoSpeedChangerOptionsPanel,
   defaultOptions: { speedFactor: 1 },
   runButtonLabel: "Change speed now",

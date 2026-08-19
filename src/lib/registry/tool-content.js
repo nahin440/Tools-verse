@@ -926,7 +926,7 @@ const OVERRIDES = {
       {
         question: "Can I convert a large, high-resolution video file?",
         answer:
-          "Yes, there's no fixed file-size cap built into this tool — the practical ceiling is your own device's available memory and processing power, since conversion runs entirely client-side rather than through a server with its own resource limits.",
+          "Yes, up to 500MB. Conversion runs entirely on your own device rather than through a server, and that cap is set well within what a browser tab can reliably hold in memory for a video conversion — going higher risks the tab running out of memory partway through, which is worse than a lower limit that works consistently.",
       },
       {
         question: "Does converting to WEBM actually make videos load faster on a website?",

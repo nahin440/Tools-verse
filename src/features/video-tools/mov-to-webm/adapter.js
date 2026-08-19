@@ -1,4 +1,5 @@
 import { convertVideo } from "@/lib/engines/media/media-core";
+import { MEDIA_MAX_SIZE_BYTES } from "@/lib/engines/media/media-limits";
 import { makeLockedMediaFormatPanel } from "@/components/tool-shared/locked-media-format-panel";
 
 const OptionsPanel = makeLockedMediaFormatPanel("webm", null);
@@ -6,7 +7,7 @@ const OptionsPanel = makeLockedMediaFormatPanel("webm", null);
 export const movToWebmAdapter = {
   accepts: ["video/*"],
   multiple: false,
-  maxSizeBytes: 1024 * 1024 * 1024,
+  maxSizeBytes: MEDIA_MAX_SIZE_BYTES,
   OptionsPanel,
   defaultOptions: { targetExt: "webm" },
   runButtonLabel: "Convert now",

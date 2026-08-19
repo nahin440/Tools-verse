@@ -1,4 +1,5 @@
 import { extractAudioFromVideo } from "@/lib/engines/media/media-core";
+import { MEDIA_MAX_SIZE_BYTES } from "@/lib/engines/media/media-limits";
 import { makeLockedMediaFormatPanel } from "@/components/tool-shared/locked-media-format-panel";
 
 const OptionsPanel = makeLockedMediaFormatPanel("mp3");
@@ -6,10 +7,7 @@ const OptionsPanel = makeLockedMediaFormatPanel("mp3");
 export const movToMp3Adapter = {
   accepts: ["video/*"],
   multiple: false,
-  // Source is a video file even though the output is audio, so this
-  // needs the same video-sized ceiling as the video-tools adapters
-  // (see that category's adapters for the full rationale).
-  maxSizeBytes: 1024 * 1024 * 1024,
+  maxSizeBytes: MEDIA_MAX_SIZE_BYTES,
   OptionsPanel,
   defaultOptions: { targetExt: "mp3" },
   runButtonLabel: "Extract audio now",

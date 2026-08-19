@@ -1,11 +1,12 @@
 import { mergeVideos } from "@/lib/engines/media/media-core";
+import { MEDIA_MAX_SIZE_BYTES } from "@/lib/engines/media/media-limits";
 import { MergeVideosOptionsPanel } from "./options-panel";
 
 export const mergeVideosAdapter = {
   accepts: ["video/*"],
   multiple: true,
   minFiles: 2,
-  maxSizeBytes: 1024 * 1024 * 1024,
+  maxSizeBytes: MEDIA_MAX_SIZE_BYTES,
   OptionsPanel: MergeVideosOptionsPanel,
   defaultOptions: {},
   runButtonLabel: "Merge videos now",

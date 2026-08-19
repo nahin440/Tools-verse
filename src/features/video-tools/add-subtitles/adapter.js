@@ -1,10 +1,11 @@
 import { burnSubtitles } from "@/lib/engines/media/media-core";
+import { MEDIA_MAX_SIZE_BYTES } from "@/lib/engines/media/media-limits";
 import { AddSubtitlesOptionsPanel } from "./options-panel";
 
 export const addSubtitlesAdapter = {
   accepts: ["video/*"],
   multiple: false,
-  maxSizeBytes: 1024 * 1024 * 1024,
+  maxSizeBytes: MEDIA_MAX_SIZE_BYTES,
   OptionsPanel: AddSubtitlesOptionsPanel,
   defaultOptions: {},
   runButtonLabel: "Burn in subtitles",

@@ -114,6 +114,33 @@ async function preloadEngineIfNeeded(toolSlug, onLoadProgress) {
   return { engineLabel: "Loading video engine…" };
 }
 
+// Matches the handful of known error shapes ffmpeg.wasm/tesseract.js/
+// onnxruntime-web (the WASM engines behind MEDIA_ENGINE_TOOL_SLUGS above)
+// actually throw when the browser can't give the WASM instance enough
+// memory for a given file — "memory access out of bounds" and
+// "Cannot enlarge memory" come from Emscripten's own abort path inside
+// the compiled engine, "RangeError: Out of Memory"/"WebAssembly.Memory"
+// are what iOS Safari/Chrome-on-iOS throw for the same underlying cause.
+// None of these carry a message a person could act on as-is (the
+// generic catch-all fallback below is literally what a person sees for
+// this case otherwise, having no idea *why* nothing happened), so this
+// intercepts specifically them and leaves every other tool's real error
+// message (a corrupt file, an unsupported codec, etc.) completely
+// unchanged — this is not a general error-prettifier.
+function isLikelyOutOfMemoryError(err) {
+  const text = `${err?.message || err?.name || err || ""}`.toLowerCase();
+  return (
+    text.includes("out of memory") ||
+    text.includes("memory access out of bounds") ||
+    text.includes("cannot enlarge memory") ||
+    text.includes("could not allocate memory") ||
+    (text.includes("webassembly") && text.includes("memory"))
+  );
+}
+
+const OUT_OF_MEMORY_MESSAGE =
+  "This file is too large for your browser to process — it ran out of memory partway through. Try a smaller file, or close other tabs and apps to free up memory before trying again.";
+
 /**
  * @typedef ToolAdapter
  * @property {string[]} accepts
@@ -194,7 +221,11 @@ export function ToolPageShell({ adapter, toolName, toolSlug }) {
       setPhase("completed");
     } catch (err) {
       console.error(err);
-      setErrorMessage(err?.message || "Something unexpected went wrong while processing your file.");
+      setErrorMessage(
+        isLikelyOutOfMemoryError(err)
+          ? OUT_OF_MEMORY_MESSAGE
+          : err?.message || "Something unexpected went wrong while processing your file."
+      );
       setPhase("error");
     }
   }, [adapter, files, options, toolSlug]);
